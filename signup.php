@@ -2,22 +2,24 @@
 <body>
     <?php include 'main.php';?>
     <form>
+        <div class="d-flex justify-content-center align-items-center vh-100">
+            <div class="neon-card p-4">
     <!--FNAME-->    
-    <div class="mb-3">
-        <label for="input" class="form-label">First Name</label>
-        <input type="email" class="form-control" id="input" aria-describedby="emailHelp">
+    <div class="mb-3">    
+    <label for="input" class="form-label">First Name</label>
+        <input type="text" class="form-control" id="input" aria-describedby="emailHelp">
     </div>
 
     <!--LNAME-->
     <div class="mb-3">
         <label for="input" class="form-label">Last Name</label>
-        <input type="email" class="form-control" id="input" aria-describedby="emailHelp">
+        <input type="text" class="form-control" id="input" aria-describedby="emailHelp">
     </div>
 
     <!--Phone number-->
     <div class="mb-3">
         <label for="input" class="form-label">Phone Number</label>
-        <input type="email" class="form-control" id="input" aria-describedby="emailHelp">
+        <input type="tel" class="form-control" id="input" aria-describedby="emailHelp">
     </div>
     
     <!--EMAIL-->    
