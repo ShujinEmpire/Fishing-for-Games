@@ -1,0 +1,20 @@
+body{
+    background-color: #050505;
+    color:#00fff7;
+}
+.neon-card{
+    width:380px;
+    background:#0a0a0a;
+    border:2px solid #ff003c;
+    box-shadow: 0 0 20px #ff003c;
+    border-radius:8px;
+}
+label{
+    color:#00fff7;
+}
+.form-control{
+    background: transparent;
+    border:2px solid #00fff7;
+    color:#00fff7;
+}
+
