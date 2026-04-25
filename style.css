@@ -31,12 +31,6 @@ body{
     clip-path:inherit;
     content:"";
 }
-.neon-card:hover{
-    box-shadow:
-    0 0 10px #00f7ff,
-    0 0 15px #00f7ff,
-    inset 0 0 15px #00f7ff;     
-}
 .neon-input{
     background:transparent;
     color:#ffffff;
