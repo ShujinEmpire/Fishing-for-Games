@@ -3,6 +3,7 @@ body{
 }
 .neon-card{
     margin-bottom:20px;
+    position:relative;
 }
 .neon-card{
     width:400px;
@@ -30,6 +31,7 @@ body{
     border:2px solid rgba(0,247,255,0.4);
     clip-path:inherit;
     content:"";
+    pointer-events: none;
 }
 .neon-card:hover{
     box-shadow:
