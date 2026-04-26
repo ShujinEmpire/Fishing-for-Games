@@ -2,13 +2,14 @@
 <body>
     <?php include 'main.php';?>
     <div class="container-fluid vh-100">
+        <div class="row h-100">
     <!--This is the left side (image) -->    
-    <div class="col-md-6 d-none d-md-block left-side">
+    <div class="col-md-6 left-side d-flex align-items-end">
     <div class="overlay-text">
             <h1>Create An Account<h1>
                 <p> Join and start exploring games<p>
 </div>
-<div class="col-md-6 d-flex justify-content align-items-center">
+<div class="col-md-6  right-side d-flex justify-content-center align-items-center">
     <div class="card p-4 signup-card">
     <form>
     <!--FNAME-->    
