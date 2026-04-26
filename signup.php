@@ -39,5 +39,9 @@
     </div>
     <button type="submit" class="btn btn-custom w-100">Sign up</button>
     </form>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>
