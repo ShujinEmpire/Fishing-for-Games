@@ -5,21 +5,26 @@ body{
 .signup-box{
     width:900px;
     min-height:600px;
+    background: rgba(10,15,30,0.9);
     border:1px soild rgba(255,255, 255,0.1);
-    border-radius: 20px;
-    overflow: visible;
+    border-radius: 25px;
+    overflow: hidden;
     position: relative;
-    box-shadow: 0 0 40px rgba(41,121, 255,0.4), 0 0 40px rgba(41,121, 255,0.5), 0 0 80px rgba(41,121, 255,0.6);
+    box-shadow: 0 0 20px rgba(41,127, 255,0.4), 0 0 60px rgba(41,127, 255,0.5), 0 0 120px rgba(41,127, 255,0.3);
+    z-index:1;
 }
 .signup-box::before{
     content:"";
     position:absolute;
-    inset:-30px;
-    background: radial-gradient(circle, rgba(41,121, 255,0.35) 0%,
-    rgba(41,121, 255,0.15) 40%,  transparent 70%
+    top:-25px;
+    left:-25px;
+    right:-25px;
+    bottom:-25px;
+
+    background: radial-gradient(circle, rgba(41,127, 255,0.4), transparent 70%
     );
     border-radius: 30px;
-    filter: blur(40px);
+    filter: blur(50px);
     z-index: -1;
 }
 .overlay-text{
@@ -79,7 +84,7 @@ body{
     transition: 0.3s;
 }
 .neon-input::placeholder{
-    color:#00f7ff;
+    color:rgba(41,121, 255,0.4);
     opacity: 0.6;
 }
 .neon-input:focus{
