@@ -4,15 +4,15 @@ body{
 }
 .signup-box{
     width:900px;
+    min-height:600px;
     border:1px soild rgba(0,255, 255,0.2);
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 0 40px rgba(0,255, 255,0.2);
 }
 .left-side{
-    background:url("images/leftside.jpg") center/cover no-repeat;
-    height:100%;
-    min-height: 600px;
+    background:url("../images/leftside.jpg") center/cover no-repeat;
+    min-height:100%;
 }
 .overlay-text{
     color:white;
