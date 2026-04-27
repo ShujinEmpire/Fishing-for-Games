@@ -21,6 +21,13 @@ body{
 .overlay-text p{
     opacity: 0.8;
 }
+.left-side{
+    background: url(images/leftside.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height:600px;
+}
 .right-side{
     background:#050510;
     padding:40px;
