@@ -1,8 +1,8 @@
 <html>
 <body>
     <?php include 'main.php';?>
-    <div class="container-fluid">
-        <div class="row h-100">
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="signup-box row g-0">
     <!--This is the left side (image) -->    
     <div class="col-md-6 left-side d-flex align-items-end">
     <div class="overlay-text">
@@ -11,37 +11,38 @@
 </div>
 </div>
 
-<div class="col-md-6  right-side d-flex justify-content-center align-items-center">
-    <div class="signup-card">
+<div class="ol-md-6 right-side d-flex  flx-column justify-content-center">
+    <h2 class="text-center text-white mb-4"> Sign Up </h2>
     <form>
-    <!--FNAME-->    
-    <div class="mb-3">  
-        <input type="text" class="form-control neon-input"  id ="firstName" name="firstName" placeholder="First Name" aria-describedby="emailHelp">
-    </div>
+    <!--FNAME-->      
+        <input type="text" class="form-control neon-input mb-3"  id ="firstName" name="firstName" placeholder="First Name" aria-describedby="emailHelp">
 
     <!--LNAME-->
-    <div class="mb-3">
-        <input type="text" class="form-control neon-input" id="lastName" name="lastName" placeholder="Last Name" aria-describedby="emailHelp">
-    </div>
+        <input type="text" class="form-control neon-input mb-3" id="lastName" name="lastName" placeholder="Last Name" aria-describedby="emailHelp">
+    
 
     <!--Phone number-->
-    <div class="mb-3">
-        <input type="tel" class="form-control neon-input" id="number" name="number" 
+    
+        <input type="tel" class="form-control neon-input mb-3" id="number" name="number" 
         placeholder="xxx-xxx-xxxx" aria-describedby="emailHelp">
-    </div>
+    
     
     <!--EMAIL-->    
-    <div class="mb-3">
-        <input type="email" class="form-control neon-input" id="email" name="email" placeholder="Email"
+    
+        <input type="email" class="form-control neon-input mb-3" id="email" name="email" placeholder="Email"
         aria-describedby="emailHelp">
-    </div>
+  
     <!--PASSWORD-->
-    <div class="mb-3">
-        <input type="password" class="form-control neon-input" id="password" name="password" placeholder="Password">
-    </div>
-    <button type="submit" class="btn btn-custom w-100">Sign up</button>
+
+        <input type="password" class="form-control neon-input mb-3" id="password" name="password" placeholder="Password">
+       <div class="form-check text-white mb-3">
+        <input class="form-check-input" type="checkbox">
+        <label class="form-check-label">
+            I accept the Terms & Conditions
+</label>
+</div> 
+    <button type="submit" class="btn neon-btn w-100 mb-3">Join Us!</button>
     </form>
-</div>
 </div>
 </div>
 </div>

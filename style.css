@@ -8,6 +8,10 @@ body{
 }
 .left-side{
     background:url("images/leftside.jpg") center/cover no repeat;
+    color:white;
+    padding:40px;
+    display:flex;
+    align-items:flex-end;
     position:relative;
 }
 .left-side::after{
