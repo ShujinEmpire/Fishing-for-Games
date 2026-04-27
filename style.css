@@ -10,7 +10,7 @@ body{
     box-shadow: 0 0 40px rgba(0,255, 255,0.2);
 }
 .left-side{
-    background:url("images/leftside.jpg") center/cover no repeat;
+    background:url("images/leftside.jpg") center/cover no-repeat;
     height:600px;
     position:relative;
 }
