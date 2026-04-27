@@ -1,3 +1,8 @@
+<?php
+    requre_once("auth.php");
+    redirect_if_loggged_in();
+?>
+
 <html>
 <body>
     <?php include 'main.php';?>
