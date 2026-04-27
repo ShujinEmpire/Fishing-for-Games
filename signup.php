@@ -5,6 +5,7 @@
         <div class="signup-box row g-0">
     <!--This is the left side (image) -->    
     <div class="col-md-6 left-side d-flex align-items-end">
+        <img src="images/leftside.jpg" width="300">
     <div class="overlay-text">
             <h2>Create An Account<h2>
                 <p> Join and start exploring games<p>

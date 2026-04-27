@@ -10,10 +10,6 @@ body{
     overflow: hidden;
     box-shadow: 0 0 40px rgba(0,255, 255,0.2);
 }
-.left-side{
-    background:url("../images/leftside.jpg") center/cover no-repeat;
-    min-height:100%;
-}
 .overlay-text{
     color:white;
     padding:40px;
