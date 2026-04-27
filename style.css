@@ -102,11 +102,6 @@ body{
     0 0 50px rgba(0,140,255,0.4);
 
 }
-.form-control{
-    background: transparent !important;
-    border: none !important;
-    box-shadow:none !important;
-}
 .neon-btn{
     background: transparent;
     padding:12px;
