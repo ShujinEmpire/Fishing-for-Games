@@ -11,7 +11,7 @@
 </div>
 </div>
 
-<div class="col-md-6 right-side d-flex  flx-column justify-content-center">
+<div class="col-md-6 right-side >
     <h2 class="text-center text-white mb-4"> Sign Up </h2>
     <form>
     <!--FNAME-->      

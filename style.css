@@ -28,6 +28,9 @@ body{
 .right-side{
     background:#050510;
     padding:40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 .neon-input{
     width:100%;
