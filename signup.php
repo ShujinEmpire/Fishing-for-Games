@@ -6,7 +6,7 @@
     <!--This is the left side (image) -->    
     <div class="col-md-6 left-side d-flex align-items-end">
     <div class="overlay-text">
-            <h1>Create An Account<h1>
+            <h2>Create An Account<h2>
                 <p> Join and start exploring games<p>
 </div>
 </div>
