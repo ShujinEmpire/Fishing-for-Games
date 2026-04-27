@@ -12,7 +12,7 @@
 </div>
 
 <div class="col-md-6 right-side">
-    <h2 class="text-center text-white mb-4"> Sign Up </h2>
+    <h2 class="text-center text-white mb-4 signup-title"> Sign Up </h2>
     <form>
     <!--FNAME-->      
         <input type="text" class="form-control neon-input mb-3"  id ="firstName" name="firstName" placeholder="First Name" aria-describedby="emailHelp">
