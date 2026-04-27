@@ -42,6 +42,9 @@
 </label>
 </div> 
     <button type="submit" class="btn neon-btn w-100 mb-3">Join Us!</button>
+    <p class="login-link text-center mt-3">
+        Already have an account? Click here ->
+        <a href="login.php">Log in</a>
     </form>
 </div>
 </div>
