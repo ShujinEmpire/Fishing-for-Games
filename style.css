@@ -77,23 +77,29 @@ body{
 }
 .right-side h2{
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 0;
 }
 .signup-title{
     font-size:32px;
     font-weight: 600;
     letter-spacing: 1px;
     color:#ffffff;
+    text-align:center;
+    margin-bottom: 8px;
+    text-shadow: 0 0 10px rgba(0, 170, 255, 0.35);
 }
 .signup-title::after{
-    width:60px;
-    height:3px;
     content:"";
+    width:70px;
+    height:4px;
+
     margin: 8px auto 0;
-    background:#00eaff;
+    background:linear-gradient(90deg, rgba(0,170,255,0.2),#00aaff,rgba(0,170,255,0.2)
+    );
     display: block;
-    border-radius:5px;
-    box-shadow:0 0 5px #00eaff, 0 0 10px #00eaff, 0 0 20px #00eaff;
+    border-radius:20px;
+    box-shadow:0 0 8px #00aaff, 0 0 16px rgba(0, 170, 255, 0.6);
+    filter: blur(0.3px);
 
 }
 .neon-input{
