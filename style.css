@@ -6,12 +6,12 @@ body{
     width:900px;
     min-height:600px;
     background: rgba(8,12,25,0.95);
-    border:none;
+    border:1px solid rgba(255, 255, 255, 0.15);
     border-radius: 32px;
     overflow: hidden;
     position: relative;
     z-index:2;
-    box-shadow: 0 0 5px rgba(0,140,255,0.25), 0 0 20px rgba(0,140, 255,0.35), 0 0 60px rgba(0,140, 255,0.25);
+    box-shadow: 0 0 15px rgba(0,140,255,0.2), 0 0 40px rgba(0,140, 255,0.15);
 }
 .signup-box::before{
     content:"";
@@ -21,10 +21,10 @@ body{
     pointer-events: none;
    
     background: linear-gradient(
-        120deg, rgba(255,255,255,0.95) 0% ,rgba(0,140,255,0.9) 15% ,rgba(0,140,255,0.5) 35%, rgba(0,140,255,0.2) 55%,
-         transparent 70%
+        120deg, rgba(255,255,255,0.9) 0% ,rgba(0,140,255,0.9) 20% ,rgba(0,140,255,0.4) 50%,
+         transparent 80%
     );
-    filter: blur(3px);
+    filter: blur(2px);
     z-index: -1;
 }
 .signup-box::after{
