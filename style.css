@@ -6,23 +6,25 @@ body{
     width:900px;
     min-height:600px;
     background: rgba(8,12,25,0.95);
-    border:1px solid rgba(0, 140, 255, 0.5);
+    border:none;
     border-radius: 32px;
     overflow: hidden;
     position: relative;
+    z-index:2;
     box-shadow: 0 0 5px rgba(0,140,255,0.25), 0 0 20px rgba(0,140, 255,0.35), 0 0 60px rgba(0,140, 255,0.25);
 }
 .signup-box::before{
     content:"";
     position:absolute;
-    inset:-2px;
+    inset:-1px;
     border-radius: 32px;
     pointer-events: none;
    
     background: linear-gradient(
-        120 deg, rgba(255,255,255,0.8),rgba(0,140,255,0.7),rgba(0,140,255,0.3), transparent 70%
+        120deg, rgba(255,255,255,0.95) 0% ,rgba(0,140,255,0.9) 15% ,rgba(0,140,255,0.5) 35%, rgba(0,140,255,0.2) 55%,
+         transparent 70%
     );
-    filter: blur(6px);
+    filter: blur(3px);
     z-index: -1;
 }
 .signup-box::after{
@@ -54,8 +56,10 @@ body{
 }
 .overlay-text p{
     font-size:16px;
+    font-weight:300;
+    letter-spacing: 0.3px;
     color:rgba(255, 255, 255, 0.85);
-    text-shadow: 0 0 6px rgba(0,170,255,0.3);
+    text-shadow: 0 0 6px rgba(0,170,255,0.25);
 }
 .left-side{
     background-image: url(images/leftside.jpg);
