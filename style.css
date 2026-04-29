@@ -99,7 +99,6 @@ body{
     display: block;
     border-radius:20px;
     box-shadow:0 0 8px #00aaff, 0 0 16px rgba(0, 170, 255, 0.6);
-    filter: blur(0.3px);
 
 }
 .neon-input{
