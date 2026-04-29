@@ -42,6 +42,7 @@ body{
     position:relative;
     padding:50px;
     z-index:2;
+    transform: translateY(-40px);
 }
 .overlay-text h2{
     font-size:34px;
