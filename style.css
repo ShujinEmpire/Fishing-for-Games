@@ -157,9 +157,13 @@ body{
 .login-page{
     margin:0;
     height:100vh;
-    background:linear-gradient(45deg, #001f3f, #003366, #00aaff);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+    background:linear-gradient(135deg, #001f3f, #003366, #00aaff);
     background-size:400% 400%;
-    animation:bgMove 10s ease infinite;
+    animation:bgMove 12s ease infinite;
 }
 @keyframes bgMove{
     0%{background-position: 0% 50%; }
@@ -168,28 +172,38 @@ body{
 }
 
 .login-page .login-box{
-    width:400px;
+    width:420px;
     padding:40px;
     color:white;
+    position: relative;
     
-    background:rgba(0, 0, 0, 0.35);
-    backdrop-filter:blur(15px);
+    background:rgba(255, 255, 255, 0.05);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 
     border-radius:20px;
-    border: 1px solid rgba(0, 170, 255, 0.3);
+    border: 1px solid rgba(0, 170, 255, 0.4);
     box-shadow:
-    0 0 20px rgba(0, 170, 255, 0.2),
-    0 0 50px rgba(0,170,255,0.15);
+    0 0 25px rgba(0, 170, 255, 0.4),0 0 80px rgba(0, 170, 255, 0.2)
+    inset 0 0 10px rgba(255,255,255,0.05);
    
 }
+.login-page .login-box::before{
+    content:"";
+    position: absolute;
+    inset:0;
+    border-radius: 20px;
+    background:linear-gradient(120deg, rgba(255,255,255,0.2),transparent 40% );
+    pointer-events: none;
+}
 
-.login-page .login-title{
+.login-title{
     text-align:center;
     font-size:32px;
     margin-bottom:5px;
     text-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
 }
-.login-page .login-title::after{
+.login-title::after{
     content:"";
     display:block;
     width:60px;
@@ -198,9 +212,38 @@ body{
     background:#00aaff;
     border-radius:20px;
 
-    box-shadow: 0 0 10px #00aaff;
+    box-shadow: 0 0 10px #00aaff
+    0 0 20px #00aaff;;
 }
+.login-input{
+    width:100%;
+    margin-bottom: 15px;
+    padding:12px 15px;
+    border-radius: 10px;
+    border:1px solid rgba(255, 255, 255, 0.05);
+    color:white;
+    outline:none;
 
+}
+.login-input:focus{
+    border-color:#00aaff;
+    box-shadow: 0 0 10px #00aaff;
+
+}
+.login-btn{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    color:white;
+    font-weight:bold;
+    background:linear-gradient(90deg,#00aaff,#005eff);
+    box-shadow: 0 0 15px rgba(0, 170, 255, 0.6);
+    transition: 0.3s;
+}
+.login-btn:hover{
+    box-shadow: 0 0 25px #00aaff, 0 0 50px #00aaff;
+}
 
 
 
