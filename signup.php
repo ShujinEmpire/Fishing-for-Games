@@ -10,7 +10,6 @@
                 <p>Join and start exploring games<p>
 </div>
 </div>
-
 <div class="col-md-6 right-side">
     <h2 class="text-center text-white mb-4 signup-title"> Sign Up </h2>
     <form>
