@@ -157,18 +157,27 @@ body{
 .login-page{
     margin:0;
     height:100vh;
-    display:flex;
     justify-content: center;
     align-items: center;
+    overflow:hidden;
+    position: relative;
+    background:radial-gradient(circle at center, #000814, #001f3f);
 
-    background:linear-gradient(135deg, #001f3f, #003366, #00aaff);
-    background-size:400% 400%;
-    animation:bgMove 12s ease infinite;
 }
-@keyframes bgMove{
-    0%{background-position: 0% 50%; }
-    50%{background-position: 100% 50%;}
-    100%{background-position: 0% 50%;}
+.login-page::before{
+    content:"";
+    position: absolute;
+    width:200%;
+    height:200%;
+   background:radial-gradient(circle at 30% 40%, rgba(0,170,255,0.4), transparent 40%),
+   radial-gradient(circle at 70% 60%,rgba(0,170,255,0.3),transparent 50% );
+    animation:moveWaves 12s linear infinite;
+    top:-50%;
+    left:-50%;
+}
+@keyframes moveWaves{
+    0%{ transform: rotate(0deg);}
+    100%{transform: rotate(360deg); }
 }
 
  .login-box{
@@ -180,20 +189,22 @@ body{
     background:rgba(255, 255, 255, 0.05);
     backdrop-filter:blur(25px);
     -webkit-backdrop-filter: blur(25px);
-    background-clip: padding-box;
+   
     border-radius:20px;
-    border: 1px solid transparent;
+    border: 1px solid rgba(255,255,255,0.2);
     box-shadow:
-    0 0 25px rgba(0, 170, 255, 0.4),0 0 80px rgba(0, 170, 255, 0.2)
+    0 0 40px rgba(0, 170, 255, 0.25),
     inset 0 0 10px rgba(255,255,255,0.05); 
 }
 .login-box::before{
     content:"";
     position: absolute;
-    inset:-1px;
+    inset:-2px;
+    
     border-radius: 20px;
-    background:linear-gradient(120deg, rgba(0,170,255,0.8),rgba(0,170,255,0.3), 
-    rgba(255,100,50,0.3));
+    background:linear-gradient(120deg,#00aaff, #00d4ff,#0099ff);
+    filter: blur(20px);
+    opacity: 0.8;
     z-index:-1;
 }
 .login-box::after{
@@ -201,58 +212,71 @@ body{
     position: absolute;
     inset:0;
     border-radius: 20px;
-    background:linear-gradient(120deg, rgba(255,255,255,0.2),transparent 40%);
+    background:linear-gradient(120deg, rgba(255,255,255,0.25),rgba(255,255,255,0.5) 40%,
+    transparent 60%);
     pointer-events: none;
 }
 
-.login-title::after{
-    content:"";
-    position: absolute;
-    display: block;
-    width:60px;
-    height:3px;
-    margin:8px auto;
-    background:#00aaff;
-    border-radius:20px;
 
-    box-shadow: 0 0 10px #00aaff
-    0 0 20px #00aaff;;
-}.login-title{
+.login-title{
     text-align:center;
     font-size:32px;
-    margin-bottom:5px;
-    text-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px #00aaff, 0 0 20px #00d4ff;
 }
-.login-input{
-    width:100%;
-    margin-bottom: 15px;
-    padding:12px 15px;
-    border-radius: 10px;
-    border:1px solid rgba(255, 255, 255, 0.05);
-    color:white;
-    outline:none;
+
+.login-sub{
+    text-align: center;
+    opacity: 0.85;
+    margin-bottom: 25px;
+}
+
+.login-page .form-control{
+    background: rgba(255, 255, 255, 0.05) !important;
+    color:white !important;
+    border:1px solid rgba(255,255,255,0.2) !important;
+    
+    border-radius:12px;
+    padding:14px;
+   transition: 0.3s;
 
 }
-.login-input:focus{
-    border-color:#00aaff;
-    box-shadow: 0 0 10px #00aaff;
+.login-page .form-control::placeholder{
+    color:rgba(255, 255, 255, 0.6);
 
+}
+.login-page .form-control:focus{
+background:rgba(255,255,255,0.008) !important;
+border-color:#00aaff !important;
+box-shadow: 0 0 10px rgba(0,170,255,0.5),
+0 0 25px rgba(0, 170, 255, 0.5)!important;
+}
+
+.input-group-text i {
+    color:#00d4ff;
 }
 .login-btn{
     width:100%;
-    padding:12px;
-    border-radius:10px;
+    padding:14px;
+    border-radius:12px;
     border:none;
     color:white;
     font-weight:bold;
-    background:linear-gradient(90deg,#00aaff,#005eff);
-    box-shadow: 0 0 15px rgba(0, 170, 255, 0.6);
+    background:linear-gradient(90deg,#00aaff,#00d4ff);
+    box-shadow: 0 0 20px rgba(0, 170, 255, 0.6),0 0 40px rgba(0, 170, 255, 0.4);
     transition: 0.3s;
 }
 .login-btn:hover{
     box-shadow: 0 0 25px #00aaff, 0 0 50px #00aaff;
+    transform: translateY(-2px);
 }
-
+.login-link{
+    text-align:center;
+    margin-top:15px;
+}
+.login-link a {
+    color:#00d4ff;
+}
 
 
 

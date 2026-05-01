@@ -9,7 +9,7 @@
                 Welcome back! Please login to continue exploring games.</p>
      <form>
     <div class="mb-3 input-group">
-     <span class="input-group-text bg-transparanet border-0">
+     <span class="input-group-text bg-transparent border-0 ">
         <i class="bi bi-envelope"></i> 
      </span>
 
@@ -25,13 +25,12 @@
        <!--<label for="input" class="form-label">Password</label> -->
         <input type="password" class="form-control login-input" id="password" name="password" placeholder="Password">
     </div>
-    <button type="submit" class="btn btn neon-btn w-100 mb-3">Log in -> </button>
-    
-  <!-- the link-->
-   <p class="text-center small-text mt-3">
-    Don't have an account?
-    <a href="signup.php" class ="login-link">Sign Up</a> </p>
+    <button type="submit" class="login-btn">Log in -> </button>
 </form>
+  <!-- the link-->
+   <p class="login-link text-center mt-3">
+    Don't have an account?
+    <a href="signup.php">Sign Up</a> </p>
 </div>
 </div>
 </body>
