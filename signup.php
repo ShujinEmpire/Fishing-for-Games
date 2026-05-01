@@ -8,9 +8,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     try {
         $pdo = get_pdo();
 
+        $stmt = $pdo->prepare("Select Email From User where Email = ?");
+
+        $stmt->execute([$_POST['Email']]);
+
+        $Email_row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $DB_Email = $Email_row['Email'];
+
         if (!filter_input(INPUT_POST, "Email", FILTER_VALIDATE_EMAIL)) {
             echo ("<p style='color: red;'>Email Invalid</p>");
-        } elseif (strlen($_POST['Password']) < 8) {
+        } elseif ($_POST['Email'] === $DB_Email) {
+            echo ("<p style='color: red;'>Email already exists</p>");
+        }elseif (strlen($_POST['Password']) < 8) {
             echo("<p style='color: red;'>Password is too small, must be at least 8 characters long</p>"); 
         }elseif(preg_match("/[!@#$%^&*()<>?]/", $_POST['Password']) === 0){
                 echo("<p style='color: red;'> Password must contain a special character from this list: \"!@#$%^&*()<>?\"");
@@ -79,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!--Phone number-->
     <div class="mb-3">
         <input type="tel" class="form-control neon-input" id="PhoneNum" name="PhoneNum" 
-        placeholder="xxx-xxx-xxxx" aria-describedby="emailHelp" required>
+        placeholder="xxxxxxxxxx" aria-describedby="emailHelp" required>
     </div>
 
     <button type="submit" class="btn btn-custom w-100">Sign up</button>
