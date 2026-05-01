@@ -295,6 +295,10 @@ outline:none;
     text-decoration: none;
     text-shadow: 0 0 8px #00d4ff;
 }
+.login-link a:hover{
+    color:white;
+    text-decoration: underline;
+}
 
 
 
