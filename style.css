@@ -186,34 +186,34 @@ body{
     color:white;
     position: relative;
     
-    background:rgba(5, 12, 35, 0.95);
-    backdrop-filter:blur(20px);
+    background:rgba(10, 20, 50, 0.45);
+    backdrop-filter:blur(35px);
    
     border-radius:20px;
-    border: 1px solid rgba(0,170,255,0.35);
+    border: 1px solid rgba(0,170,255,0.6);
     box-shadow:
-    0 0 25px rgba(0, 170, 255, 0.15),
-    inset 0 0 8px rgba(255,255,255,0.03); 
+    0 0 30px rgba(0, 170, 255, 0.25),
+    inset 0 0 15px rgba(255,255,255,0.05); 
 }
 .login-box::before{
     content:"";
     position: absolute;
-    inset:-2px;
+    inset:0;
     
     border-radius: 20px;
-    background:linear-gradient(120deg,#00e0ff, #00aaff,#007bff);
-    filter: blur(20px);
-    opacity: 0.8;
-    z-index:-1;
+    border:1.5px solid rgba(0, 212, 255, 0.9);
+    box-shadow:0 0 12px #00d4ff, 0 0 25px rgba(0, 212, 255, 0.5);
 }
 .login-box::after{
     content:"";
-    opacity:0.08;
     position: absolute;
     inset:0;
     border-radius: 20px;
+     background:linear-gradient(120deg, rgba(255,255,255,0.15),
+      rgba(255,255,255,0.05) 40%, 
+     transparent 60%); 
     pointer-events: none;
-    filter:blur(15px);
+
 }
 
 
@@ -231,9 +231,9 @@ body{
 }
 
 .login-page .form-control{
-    background: rgba(5, 12, 30, 0.09) !important;
+    background: rgba(10, 25, 60, 0.6) !important;
     color:white !important;
-    border:1px solid rgba(0,170,255,0.25) !important;
+    border:1px solid rgba(0,170,255,0.35) !important;
     
     border-radius:12px;
     padding:14px;
@@ -278,7 +278,7 @@ outline:none;
     color:white;
     font-weight:bold;
     background:linear-gradient(90deg,#00e0ff,#007bff);
-    box-shadow: 0 0 12px rgba(0, 170, 255, 0.6),0 0 25px rgba(0, 170, 255, 0.3);
+    box-shadow: 0 0 15px #00d4ff,0 0 40px rgba(0, 170, 255, 0.4);
     transition: 0.3s;
 }
 .login-btn:hover{
