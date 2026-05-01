@@ -186,14 +186,13 @@ body{
     color:white;
     position: relative;
     
-    background:rgba(255, 255, 255, 0.05);
-    backdrop-filter:blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    background:rgba(5, 12, 35, 0.85);
+    backdrop-filter:blur(20px);
    
     border-radius:20px;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(0,170,255,0.35);
     box-shadow:
-    0 0 40px rgba(0, 170, 255, 0.25),
+    0 0 25px rgba(0, 170, 255, 0.25),
     inset 0 0 10px rgba(255,255,255,0.05); 
 }
 .login-box::before{
@@ -209,12 +208,14 @@ body{
 }
 .login-box::after{
     content:"";
+    opacity:0.25;
     position: absolute;
     inset:0;
     border-radius: 20px;
     background:linear-gradient(120deg, rgba(255,255,255,0.25),rgba(255,255,255,0.5) 40%,
     transparent 60%);
     pointer-events: none;
+    filter:blur(25px);
 }
 
 
@@ -246,28 +247,34 @@ body{
 
 }
 .login-page .form-control:focus{
-background:rgba(255,255,255,0.008) !important;
+background:rgba(0,15,35,0.7) !important;
 border-color:#00aaff !important;
-box-shadow: 0 0 10px rgba(0,170,255,0.5),
-0 0 25px rgba(0, 170, 255, 0.5)!important;
+box-shadow: 0 0 8px #00d4ff,
+0 0 18px rgba(0, 170, 255, 0.35);
+outline:none;
 }
-
+.input-group-text{
+    background: transparent;
+    border:none;
+}
 .input-group-text i {
     color:#00d4ff;
+    font-size:18px;
+    text-shadow: 0 0 8px #00d4ff;
 }
 .login-btn{
     width:100%;
     padding:14px;
-    border-radius:12px;
+    border-radius:14px;
     border:none;
     color:white;
     font-weight:bold;
-    background:linear-gradient(90deg,#00aaff,#00d4ff);
-    box-shadow: 0 0 20px rgba(0, 170, 255, 0.6),0 0 40px rgba(0, 170, 255, 0.4);
+    background:linear-gradient(90deg,#00e0ff,#007bff);
+    box-shadow: 0 0 20px rgba(0, 170, 255, 0.6),0 0 50px rgba(0, 170, 255, 0.35);
     transition: 0.3s;
 }
 .login-btn:hover{
-    box-shadow: 0 0 25px #00aaff, 0 0 50px #00aaff;
+    box-shadow: 0 0 25px #00d4ff, 0 0 50px #0099ff;
     transform: translateY(-2px);
 }
 .login-link{
@@ -276,6 +283,8 @@ box-shadow: 0 0 10px rgba(0,170,255,0.5),
 }
 .login-link a {
     color:#00d4ff;
+    text-decoration: none;
+    text-shadow: 0 0 8px #00d4ff;
 }
 
 
