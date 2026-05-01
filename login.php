@@ -8,24 +8,20 @@
             <p class="login-sub">
                 Welcome back! Please login to continue exploring games.</p>
      <form>
-    <div class="mb-3 input-group">
-     <span class="input-group-text bg-transparent border-0 ">
-        <i class="bi bi-envelope"></i> 
-     </span>
-
+    <div class="mb-3 position-relative">
+        <i class="bi bi-envelope input-icon"></i>
+    
        <!-- <label for="input" class="form-label">Email address</label> -->
         
-       <input type="email" class="form-control login-input" id="email"  name="email" placeholder="Email Address" aria-describedby="emailHelp">
+       <input type="email" class="form-control " id="email"  name="email" placeholder="Email Address" aria-describedby="emailHelp">
     </div>
 
-    <div class="mb-3 input-group">
-        <span class="input-group-text bg-transparent border-0">
-            <i class="bi bi-lock"></i>
-        </span>
+    <div class="mb-3 position-relative">
+            <i class="bi bi-lock input-icon"></i>
        <!--<label for="input" class="form-label">Password</label> -->
-        <input type="password" class="form-control login-input" id="password" name="password" placeholder="Password">
+        <input type="password" class="form-control " id="password" name="password" placeholder="Password">
     </div>
-    <button type="submit" class="login-btn">Log in -> </button>
+    <button type="submit" class="login-btn">Log in</button>
 </form>
   <!-- the link-->
    <p class="login-link text-center mt-3">

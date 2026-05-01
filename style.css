@@ -237,7 +237,18 @@ body{
     
     border-radius:12px;
     padding:14px;
-   transition: 0.3s;
+    padding-left:45px;
+    transition: 0.3s;
+
+}
+.input-icon{
+    position: absolute;
+    left:14px;
+    top:50%;
+    transform: translateY(-50%);
+    color:#00e0ff;
+    font-size:18px;
+    pointer-events:none;
 
 }
 .login-page .form-control::placeholder{
