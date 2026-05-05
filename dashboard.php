@@ -4,7 +4,10 @@
 //  dashboard.php
 // ============================================================
 
+require_once("auth.php");
+require_once("config.php");
 session_start();
+$pdo = get_pdo();
 
 // ── Auth & User ──────────────────────────────────────────────
 $is_logged_in  = isset($_SESSION['user_id']);
@@ -18,7 +21,7 @@ $total_catches  = null;
 $games_in_pond  = null;
 $on_the_hook    = null;
 $recent_catches = [];
-
+ 
 // ── Helper: lure score CSS class ─────────────────────────────
 function lure_class(float $score): string {
     if ($score >= 8.5) return 'lure-great';
@@ -55,7 +58,7 @@ function stat_value($val): string {
 
     <!-- Sidebar footer -->
     <div class="sidebar-footer">
-      <?php if ($is_logged_in): ?>
+      <?php if (is_logged_in()): ?>
         <div class="admin-user">
           <div class="avatar"><?= $user_initials ?></div>
           <div>
@@ -68,7 +71,7 @@ function stat_value($val): string {
           <a href="logout.php" class="btn-signin" style="display:block;text-align:center;color:var(--muted);text-decoration:none;font-size:.8rem;padding:.45rem;border:1px solid var(--border);">Sign Out</a>
         </div>
       <?php else: ?>
-        <a href="login.php" class="btn-signin">Sign In</a>
+        <a href="logout.php" class="btn-signin">Sign In</a>
         <div class="not-logged-in">Not logged in</div>
       <?php endif; ?>
     </div>
@@ -81,7 +84,7 @@ function stat_value($val): string {
     <!-- Topbar -->
     <div class="topbar">
       <div class="topbar-title">
-        <?php if ($is_logged_in): ?>
+        <?php if (is_logged_in()): ?>
           <small>Welcome back, <?= $user_name ?></small>
         <?php endif; ?>
         The Dock
@@ -90,7 +93,7 @@ function stat_value($val): string {
         <div class="search-wrap">
           <input type="text" placeholder="Search the waters…">
         </div>
-        <?php if ($is_logged_in): ?>
+        <?php if (is_logged_in()): ?>
           <a href="review_new.php" class="btn-cast">+ Cast a Review</a>
         <?php endif; ?>
       </div>
