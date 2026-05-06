@@ -20,13 +20,12 @@ $user_initials = $is_logged_in ? strtoupper(substr($user_name, 0, 2))           
 $total_catches  = null;
 $games_in_pond  = null;
 $on_the_hook    = null;
-$recent_catches = [];
  
 // ── Helper: lure score CSS class ─────────────────────────────
 function lure_class(float $score): string {
-    if ($score >= 8.5) return 'lure-great';
-    if ($score >= 7.0) return 'lure-good';
-    if ($score >= 5.0) return 'lure-mid';
+    if ($score >= 4.3) return 'lure-great';
+    if ($score >= 3.5) return 'lure-good';
+    if ($score >= 2.5) return 'lure-mid';
     return 'lure-bad';
 }
 
@@ -71,7 +70,7 @@ function stat_value($val): string {
           <a href="logout.php" class="btn-signin" style="display:block;text-align:center;color:var(--muted);text-decoration:none;font-size:.8rem;padding:.45rem;border:1px solid var(--border);">Sign Out</a>
         </div>
       <?php else: ?>
-        <a href="logout.php" class="btn-signin">Sign In</a>
+        <a href="login.php" class="btn-signin">Sign In</a>
         <div class="not-logged-in">Not logged in</div>
       <?php endif; ?>
     </div>
@@ -91,7 +90,13 @@ function stat_value($val): string {
       </div>
       <div style="display:flex;align-items:center;gap:.8rem;">
         <div class="search-wrap">
-          <input type="text" placeholder="Search the waters…">
+          <input
+            type="text"
+            id="live-search"
+            placeholder="Search the waters…"
+            autocomplete="off"
+            onkeyup="searchGames(this.value)"
+          >
         </div>
         <?php if (is_logged_in()): ?>
           <a href="review_new.php" class="btn-cast">+ Cast a Review</a>
@@ -105,8 +110,8 @@ function stat_value($val): string {
       <!-- Total Catches -->
       <div class="stat-card">
         <div class="stat-label">Total Catches</div>
-        <div class="stat-value"><?= stat_value($total_catches) ?></div>
-        <div class="stat-note">
+        <div class="stat-value" id="stat-catches"><?= stat_value($total_catches) ?></div>
+        <div class="stat-note" id="stat-catches-note">
           <?= $total_catches !== null ? '' : 'No data yet' ?>
         </div>
       </div>
@@ -114,8 +119,8 @@ function stat_value($val): string {
       <!-- Games in Pond -->
       <div class="stat-card">
         <div class="stat-label">Games in Pond</div>
-        <div class="stat-value"><?= stat_value($games_in_pond) ?></div>
-        <div class="stat-note">
+        <div class="stat-value" id="stat-games"><?= stat_value($games_in_pond) ?></div>
+        <div class="stat-note" id="stat-games-note">
           <?= $games_in_pond !== null ? '' : 'No data yet' ?>
         </div>
       </div>
@@ -137,60 +142,136 @@ function stat_value($val): string {
     </div>
 
     <!-- ── Recent Catches Table ── -->
-    <div class="section-title">Recent Catches</div>
+    <div class="section-title">
+      Recent Catches
+      <span id="result-count" style="font-weight:normal;font-size:.75rem;color:var(--muted);margin-left:.4rem;"></span>
+    </div>
     <div class="catch-table">
       <table>
         <thead>
           <tr>
             <th>Game</th>
             <th>Platform</th>
-            <th>Angler</th>
+            <th>Genre</th>
             <th>Lure Score</th>
-            <th>Reeled In</th>
-            <?php if ($is_admin): ?><th></th><?php endif; ?>
+            <th>Reviews</th>
+            <th>Released</th>
           </tr>
         </thead>
-        <tbody>
-          <?php if (!empty($recent_catches)): ?>
-            <?php foreach ($recent_catches as $catch): ?>
-              <tr>
-                <td>
-                  <span class="game-title"><?= htmlspecialchars($catch['game']) ?></span>
-                </td>
-                <td>
-                  <span class="platform-tag"><?= htmlspecialchars($catch['platform']) ?></span>
-                </td>
-                <td>
-                  <span class="avatar"><?= strtoupper(substr($catch['angler'], 0, 2)) ?></span>
-                  <?= htmlspecialchars($catch['angler']) ?>
-                </td>
-                <td>
-                  <span class="lure <?= lure_class((float)$catch['score']) ?>">
-                    <?= number_format((float)$catch['score'], 1) ?>
-                  </span>
-                </td>
-                <td class="date-col">
-                  <?= date('M j', strtotime($catch['created_at'])) ?>
-                </td>
-                <?php if ($is_admin): ?>
-                  <td>
-                    <a href="review_edit.php?id=<?= (int)$catch['id'] ?>" class="edit-link">edit</a>
-                  </td>
-                <?php endif; ?>
-              </tr>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <tr>
-              <td colspan="<?= $is_admin ? 6 : 5 ?>">
-                <div class="empty-state">No catches yet — the waters are quiet.</div>
-              </td>
-            </tr>
-          <?php endif; ?>
+        <tbody id="game-results">
+          <tr>
+            <td colspan="6">
+              <div class="empty-state">Loading…</div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
 
   </main>
+
+  <script>
+    // ── Live Search ──────────────────────────────────────────
+    let searchTimeout = null;
+
+    function searchGames(query) {
+      // Debounce: wait 200ms after the user stops typing
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(function() {
+        fetchGames(query);
+      }, 200);
+    }
+
+    function fetchGames(query) {
+      const data = new FormData();
+      data.append("search", query);
+
+      fetch("fetch_games.php", {
+        method: "POST",
+        body: data
+      })
+      .then(function(response) { return response.json(); })
+      .then(function(games) {
+        const tbody = document.getElementById("game-results");
+        const countEl = document.getElementById("result-count");
+
+        // Handle errors
+        if (games.error) {
+          tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state" style="color:#f87171;">Error: ' + games.error + '</div></td></tr>';
+          return;
+        }
+
+        // Update stat cards with live data
+        const statGames = document.getElementById("stat-games");
+        const statGamesNote = document.getElementById("stat-games-note");
+        if (statGames) {
+          statGames.textContent = games.length;
+          statGamesNote.textContent = games.length === 1 ? '1 game found' : games.length + ' games found';
+        }
+
+        // Update total reviews across all results
+        let totalReviews = 0;
+        games.forEach(function(g) { totalReviews += parseInt(g.ReviewCount) || 0; });
+        const statCatches = document.getElementById("stat-catches");
+        const statCatchesNote = document.getElementById("stat-catches-note");
+        if (statCatches) {
+          statCatches.textContent = totalReviews;
+          statCatchesNote.textContent = totalReviews === 1 ? '1 review total' : totalReviews + ' reviews total';
+        }
+
+        // Update result count
+        countEl.textContent = '(' + games.length + ')';
+
+        // No results
+        if (games.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state">No catches found — try a different search.</div></td></tr>';
+          return;
+        }
+
+        // Build table rows
+        let html = '';
+        games.forEach(function(g) {
+          const score = parseFloat(g.AvgScore) || 0;
+          let scoreClass = 'lure-bad';
+          if (score >= 4.3) scoreClass = 'lure-great';
+          else if (score >= 3.5) scoreClass = 'lure-good';
+          else if (score >= 2.5) scoreClass = 'lure-mid';
+
+          const reviews = parseInt(g.ReviewCount) || 0;
+          const released = g.ReleaseDate ? new Date(g.ReleaseDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+          const gameId = g.GameID || 0;
+
+          html += '<tr onclick="window.location=\'game.php?id=' + gameId + '\'" style="cursor:pointer;">';
+          html += '  <td><span class="game-title">' + escapeHtml(g.Title || '') + '</span></td>';
+          html += '  <td><span class="platform-tag">' + escapeHtml(g.Platform || '') + '</span></td>';
+          html += '  <td style="color:var(--muted);font-size:.82rem;">' + escapeHtml(g.Genre || '') + '</td>';
+          html += '  <td><span class="lure ' + scoreClass + '">' + score.toFixed(1) + '</span></td>';
+          html += '  <td style="color:var(--muted);font-size:.82rem;">' + reviews + '</td>';
+          html += '  <td class="date-col">' + released + '</td>';
+          html += '</tr>';
+        });
+
+        tbody.innerHTML = html;
+      })
+      .catch(function(err) {
+        document.getElementById("game-results").innerHTML =
+          '<tr><td colspan="6"><div class="empty-state" style="color:#f87171;">Fetch error: ' + err + '</div></td></tr>';
+        console.error(err);
+      });
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(text) {
+      var div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Load all games on page load
+    window.onload = function() {
+      fetchGames("");
+    };
+  </script>
 
 </body>
 </html>
