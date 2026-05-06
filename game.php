@@ -202,7 +202,7 @@ if ($review_count > 0) {
 
     <!-- Back link -->
     <a href="dashboard.php" class="back-link">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
       Back to The Dock
     </a>
 
@@ -403,6 +403,15 @@ if ($review_count > 0) {
             </div>
             <?php if ($r_body): ?>
               <div class="review-body"><?= nl2br($r_body) ?></div>
+            <?php endif; ?>
+            <?php if ($is_own || $is_admin): ?>
+              <div style="margin-top:.6rem;text-align:right;">
+                <a href="delete_review.php?game_id=<?= $game_id ?>&uid=<?= (int)($review['UID'] ?? 0) ?>"
+                   class="btn-delete-review"
+                   onclick="return confirm('Delete your review? This can\'t be undone.');">
+                  Delete Review
+                </a>
+              </div>
             <?php endif; ?>
           </div>
         <?php endforeach; ?>

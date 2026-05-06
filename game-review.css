@@ -400,6 +400,22 @@
 }
 .login-prompt a { color: var(--teal); }
 
+/* ── Delete Review Button ── */
+.btn-delete-review {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: bold;
+  color: #f87171;
+  border: 1px solid #f87171;
+  padding: .25rem .6rem;
+  text-decoration: none;
+  transition: background .15s, color .15s;
+}
+.btn-delete-review:hover {
+  background: #f87171;
+  color: var(--bg);
+}
+
 /* ── Responsive ── */
 
 @media (max-width: 768px) {
