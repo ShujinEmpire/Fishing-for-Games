@@ -4,11 +4,17 @@
 //  create_game.php
 // ============================================================
 
+/*
+TODO: check if game alreadt exists (by name) and prevent duplicates. 
+thus you need to make GName unique
+*/
+
 require_once("auth.php");
 require_once("config.php");
 session_start();
 $pdo = get_pdo();
 
+$is_logged_in = is_logged_in();
 $user_name = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : null;
 $user_email = $is_logged_in ? htmlspecialchars($_SESSION['email']    ?? '') : null;
 $user_initials = $is_logged_in ? strtoupper(substr($user_name, 0, 2)) : null;
@@ -97,8 +103,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <div class="nav-section">Navigate</div>
     <a href="dashboard.php" class="nav-link">The Dock</a>
+    <div class="nav-section">Admin</div>
     <a href="create_game.php" class="nav-link active">Create Game</a>
-
+ <!-- Sidebar footer -->
     <div class="sidebar-footer">
       <?php if (is_logged_in()): ?>
         <div class="admin-user">
@@ -111,10 +118,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
         <div style="margin-top:.6rem;">
           <a href="logout.php" class="btn-signin" style="display:block;text-align:center;color:var(--muted);text-decoration:none;font-size:.8rem;padding:.45rem;border:1px solid var(--border);">Sign Out</a>
-      </div>
+        </div>
+      <?php else: ?>
+        <a href="login.php" class="btn-signin">Sign In</a>
+        <div class="not-logged-in">Not logged in</div>
       <?php endif; ?>
     </div>
-
   </nav>
 
   <!-- ── Main Content ── -->

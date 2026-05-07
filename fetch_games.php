@@ -9,115 +9,55 @@ require_once("config.php");
 
 header("Content-Type: application/json");
 
-$search = "%" . ($_POST['search'] ?? '') . "%";
-$results = [];
+$term = trim($_POST['search'] ?? '');
+$like = "%" . $term . "%";
 
-// ── Try DB first ─────────────────────────────────────────────
 try {
     $pdo = get_pdo();
 
     $stmt = $pdo->prepare("
-        SELECT g.GID, g.GName, g.Platform, g.Genre, g.DSName,
-               g.PSName, g.GReleaseDate, g.Description, g.Cover_Image,
-               g.Platorms, COALESCE(AVG(r.Rating), 0) AS Rating,
-               COUNT(r.RID) AS ReviewCount
+        SELECT
+            g.GID,
+            g.GName,
+            g.Platforms,
+            g.Genre,
+            g.DSName,
+            g.PName,
+            g.GReleaseDate,
+            g.Description,
+            g.Cover_Image,
+            COALESCE(AVG(r.Rating), 0) AS Rating,
+            COUNT(r.RID) AS ReviewCount
         FROM Game g
         LEFT JOIN Review r ON g.GID = r.GID
-        WHERE g.GName LIKE ?%
-        GROUP BY g.GID
+        WHERE
+            :term = ''
+            OR g.GName LIKE :like1
+        GROUP BY
+            g.GID,
+            g.GName,
+            g.Platforms,
+            g.Genre,
+            g.DSName,
+            g.PName,
+            g.GReleaseDate,
+            g.Description,
+            g.Cover_Image
         ORDER BY g.GName ASC
     ");
-    $stmt->execute([$search]);
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt->execute([
+        ':term' => $term,
+        ':like1' => $like,
+    ]);
+
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    exit;
 
 } catch (PDOException $e) {
-    // DB not available — fall through to mock data
+    http_response_code(500);
+    echo json_encode([
+        'error' => $e->getMessage()
+    ]);
+    exit;
 }
-
-// ── Mock data fallback ───────────────────────────────────────
-// Remove this block once your Game table is populated.
-if (empty($results)) {
-    $mock = [
-        [
-            'GameID'      => 1,
-            'Title'       => 'Elden Ring',
-            'Platform'    => 'PS5',
-            'Genre'       => 'Action RPG',
-            'Developer'   => 'FromSoftware',
-            'Publisher'   => 'Bandai Namco',
-            'ReleaseDate' => '2022-02-25',
-            'AvgScore'    => 4.3,
-            'ReviewCount' => 4,
-        ],
-        [
-            'GameID'      => 2,
-            'Title'       => 'The Legend of Zelda: Tears of the Kingdom',
-            'Platform'    => 'Switch',
-            'Genre'       => 'Adventure',
-            'Developer'   => 'Nintendo EPD',
-            'Publisher'   => 'Nintendo',
-            'ReleaseDate' => '2023-05-12',
-            'AvgScore'    => 4.8,
-            'ReviewCount' => 6,
-        ],
-        [
-            'GameID'      => 3,
-            'Title'       => 'Baldur\'s Gate 3',
-            'Platform'    => 'PC',
-            'Genre'       => 'RPG',
-            'Developer'   => 'Larian Studios',
-            'Publisher'   => 'Larian Studios',
-            'ReleaseDate' => '2023-08-03',
-            'AvgScore'    => 4.7,
-            'ReviewCount' => 5,
-        ],
-        [
-            'GameID'      => 4,
-            'Title'       => 'Cyberpunk 2077',
-            'Platform'    => 'PC',
-            'Genre'       => 'Action RPG',
-            'Developer'   => 'CD Projekt Red',
-            'Publisher'   => 'CD Projekt',
-            'ReleaseDate' => '2020-12-10',
-            'AvgScore'    => 3.2,
-            'ReviewCount' => 3,
-        ],
-        [
-            'GameID'      => 5,
-            'Title'       => 'Hollow Knight',
-            'Platform'    => 'PC',
-            'Genre'       => 'Metroidvania',
-            'Developer'   => 'Team Cherry',
-            'Publisher'   => 'Team Cherry',
-            'ReleaseDate' => '2017-02-24',
-            'AvgScore'    => 4.6,
-            'ReviewCount' => 7,
-        ],
-        [
-            'GameID'      => 6,
-            'Title'       => 'Red Dead Redemption 2',
-            'Platform'    => 'PS4',
-            'Genre'       => 'Action Adventure',
-            'Developer'   => 'Rockstar Games',
-            'Publisher'   => 'Rockstar Games',
-            'ReleaseDate' => '2018-10-26',
-            'AvgScore'    => 4.9,
-            'ReviewCount' => 8,
-        ],
-    ];
-
-    // Filter mock data by search term
-    $term = strtolower(trim($_POST['search'] ?? ''));
-    if ($term === '') {
-        $DB = $results;
-    } else {
-        $results = array_values(array_filter($mock, function($results) use ($term) {
-            return stripos($g['GName'], $term) !== false
-                || stripos($g['Genre'], $term) !== false
-                || stripos($g['Platforms'], $term) !== false
-                || stripos($g['DSName'], $term) !== false;
-        }));
-    }
-}
-
-echo json_encode($results);

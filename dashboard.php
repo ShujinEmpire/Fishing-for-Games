@@ -16,7 +16,6 @@ $user_name     = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User
 $user_email    = $is_logged_in ? htmlspecialchars($_SESSION['email']    ?? '')     : null;
 $user_initials = $is_logged_in ? strtoupper(substr($user_name, 0, 2))            : null;
 
-// ── Placeholder values (remove once DB is connected) ─────────
 $total_catches  = null;
 $games_in_pond  = null;
 $on_the_hook    = null;
@@ -59,7 +58,7 @@ function stat_value($val): string {
     <a href="dashboard.php" class="nav-link active">The Dock</a>
     <?php if($is_admin): ?>
         <div class="nav-section">Admin</div>
-        <a href="create_game.php" class="nav-link active">Create Game</a>
+        <a href="create_game.php" class="nav-link">Create Game</a>
     <?php endif; ?>
 
     <!-- Sidebar footer -->
@@ -97,11 +96,8 @@ function stat_value($val): string {
       </div>
       <div style="display:flex;align-items:center;gap:.8rem;">
         <div class="search-wrap">
-          <input type="text" placeholder="Search the waters…">
+          <input id="game-search" type="text" placeholder="Search the waters…" autocomplete="off">
         </div>
-        <?php if (is_logged_in()): ?>
-          <a href="fetch_games.php" class="btn-cast">+ Cast a Review</a>
-        <?php endif; ?>
       </div>
     </div>
 
@@ -111,8 +107,8 @@ function stat_value($val): string {
       <!-- Total Catches -->
       <div class="stat-card">
         <div class="stat-label">Total Catches</div>
-        <div class="stat-value"><?= stat_value($total_catches) ?></div>
-        <div class="stat-note">
+        <div id="stat-catches" class="stat-value"><?= stat_value($total_catches) ?></div>
+        <div id="stat-catches-note" class="stat-note">
           <?= $total_catches !== null ? '' : 'No data yet' ?>
         </div>
       </div>
@@ -120,8 +116,8 @@ function stat_value($val): string {
       <!-- Games in Pond -->
       <div class="stat-card">
         <div class="stat-label">Games in Pond</div>
-        <div class="stat-value"><?= stat_value($games_in_pond) ?></div>
-        <div class="stat-note">
+        <div id="stat-games" class="stat-value"><?= stat_value($games_in_pond) ?></div>
+        <div id="stat-games-note" class="stat-note">
           <?= $games_in_pond !== null ? '' : 'No data yet' ?>
         </div>
       </div>
@@ -143,51 +139,46 @@ function stat_value($val): string {
     </div>
 
     <!-- ── Recent Catches Table ── -->
-    <div class="section-title">Recent Catches</div>
+    <div class="section-title">Games <span id="result-count"></span></div>
     <div class="catch-table">
       <table>
         <thead>
           <tr>
             <th>Game</th>
-            <th>Platform</th>
-            <th>Angler</th>
-            <th>Lure Score</th>
-            <th>Reeled In</th>
-            <?php if ($is_admin): ?><th></th><?php endif; ?>
+            <th>Platforms</th>
+            <th>Genre</th>
+            <th>Avg Rating</th>
+            <th>Reviews</th>
+            <th>Released</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="game-results">
           <?php if (!empty($recent_catches)): ?>
             <?php foreach ($recent_catches as $catch): ?>
               <tr>
                 <td>
-                  <span class="game-title"><?= htmlspecialchars($catch['game']) ?></span>
+                  <span class="game-title"><?= htmlspecialchars($catch['GName']) ?></span>
                 </td>
                 <td>
-                  <span class="platform-tag"><?= htmlspecialchars($catch['platform']) ?></span>
+                  <span class="platform-tag"><?= htmlspecialchars($catch['Platforms']) ?></span>
                 </td>
                 <td>
-                  <span class="avatar"><?= strtoupper(substr($catch['angler'], 0, 2)) ?></span>
-                  <?= htmlspecialchars($catch['angler']) ?>
+                  <span class="avatar"><?= strtoupper(substr($catch['Cover_Image'], 0, 2)) ?></span>
+                  <?= htmlspecialchars($catch['Cover_Image']) ?>
                 </td>
                 <td>
-                  <span class="lure <?= lure_class((float)$catch['score']) ?>">
-                    <?= number_format((float)$catch['score'], 1) ?>
+                  <span class="lure <?= lure_class((float)$catch['Rating']) ?>">
+                    <?= number_format((float)$catch['Rating'], 1) ?>
                   </span>
                 </td>
                 <td class="date-col">
-                  <?= date('M j', strtotime($catch['created_at'])) ?>
+                  <?= date('M j', strtotime($catch['GReleaseDate'])) ?>
                 </td>
-                <?php if ($is_admin): ?>
-                  <td>
-                    <a href="review_edit.php?id=<?= (int)$catch['id'] ?>" class="edit-link">edit</a>
-                  </td>
-                <?php endif; ?>
               </tr>
             <?php endforeach; ?>
           <?php else: ?>
             <tr>
-              <td colspan="<?= $is_admin ? 6 : 5 ?>">
+              <td colspan="6">
                 <div class="empty-state">No catches yet — the waters are quiet.</div>
               </td>
             </tr>
@@ -222,6 +213,11 @@ function stat_value($val): string {
         const tbody = document.getElementById("game-results");
         const countEl = document.getElementById("result-count");
 
+        if (!tbody) {
+          console.error('Missing <tbody id="game-results"> in dashboard.php');
+          return;
+        }
+
         // Handle errors
         if (games.error) {
           tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state" style="color:#f87171;">Error: ' + games.error + '</div></td></tr>';
@@ -247,7 +243,7 @@ function stat_value($val): string {
         }
 
         // Update result count
-        countEl.textContent = '(' + games.length + ')';
+        if (countEl) countEl.textContent = '(' + games.length + ')';
 
         // No results
         if (games.length === 0) {
@@ -281,8 +277,10 @@ function stat_value($val): string {
         tbody.innerHTML = html;
       })
       .catch(function(err) {
-        document.getElementById("game-results").innerHTML =
-          '<tr><td colspan="6"><div class="empty-state" style="color:#f87171;">Fetch error: ' + err + '</div></td></tr>';
+        const tbody = document.getElementById("game-results");
+        if (tbody) {
+          tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state" style="color:#f87171;">Fetch error: ' + escapeHtml(String(err)) + '</div></td></tr>';
+        }
         console.error(err);
       });
     }
@@ -294,13 +292,19 @@ function stat_value($val): string {
       return div.innerHTML;
     }
 
-    // Load all games on page load
-    window.onload = function() {
+    // Connect the search input to the async search and load all games on page load
+    document.addEventListener("DOMContentLoaded", function() {
+      const searchInput = document.getElementById("game-search");
+
+      if (searchInput) {
+        searchInput.addEventListener("input", function() {
+          searchGames(this.value);
+        });
+      }
+
       fetchGames("");
-    };
+    });
   </script>
 
-</body>
-</html>
 </body>
 </html>

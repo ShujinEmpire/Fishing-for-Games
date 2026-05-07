@@ -4,6 +4,11 @@
 //  game.php
 // ============================================================
 
+/* 
+TODO: add delete to admin actions, and add check in game_delete.php to prevent 
+non-admins from deleting. aswell as for reviews.
+*/
+
 require_once("auth.php");
 require_once("config.php");
 session_start();
@@ -54,68 +59,6 @@ if ($game) {
     }
 }
 
-// ── MOCK DATA (remove once DB is fully connected) ────────────
-// If no game was found from the DB, show mock data so you can
-// preview the layout. Delete this entire block once your Game
-// and Review tables are populated.
-if (!$game) {
-    $game = [
-        'GameID'      => 1,
-        'Title'       => 'Elden Ring',
-        'Platform'    => 'PS5',
-        'Genre'       => 'Action RPG',
-        'Developer'   => 'FromSoftware',
-        'Publisher'   => 'Bandai Namco',
-        'ReleaseDate' => '2022-02-25',
-        'Description' => 'Elden Ring is an action RPG set in the Lands Between, a sprawling open world full of danger and discovery. Created by Hidetaka Miyazaki and George R. R. Martin, the game features punishing combat, deep lore, and an interconnected world that rewards exploration at every turn.',
-        'CoverURL'    => null,
-    ];
-    $game_id = 1;
-
-    $reviews = [
-        [
-            'ReviewID'   => 1,
-            'UID'        => 99,
-            'GameID'     => 1,
-            'Score'      => 5,
-            'Comment'    => 'An absolute masterpiece. The open world design is unlike anything I\'ve played before. Every corner has something new to discover, and the boss fights are incredible.',
-            'created_at' => '2025-04-28 14:30:00',
-            'FName'      => 'Marcus',
-            'LName'      => 'Rivera',
-        ],
-        [
-            'ReviewID'   => 2,
-            'UID'        => 100,
-            'GameID'     => 1,
-            'Score'      => 4,
-            'Comment'    => 'Great game with tons of content. The difficulty can be frustrating at times, but the sense of accomplishment when you beat a tough boss is unmatched. Wish the story was a bit more straightforward.',
-            'created_at' => '2025-04-25 09:15:00',
-            'FName'      => 'Alexis',
-            'LName'      => 'Sanchez',
-        ],
-        [
-            'ReviewID'   => 3,
-            'UID'        => 101,
-            'GameID'     => 1,
-            'Score'      => 5,
-            'Comment'    => 'FromSoftware at their best. The world feels alive, the combat is tight, and there\'s so much build variety. Easily one of the best games of the decade.',
-            'created_at' => '2025-04-20 18:45:00',
-            'FName'      => 'Jordan',
-            'LName'      => 'Chen',
-        ],
-        [
-            'ReviewID'   => 4,
-            'UID'        => 102,
-            'GameID'     => 1,
-            'Score'      => 3,
-            'Comment'    => 'It\'s good but overhyped. The open world gets repetitive in the later areas and some of the endgame bosses feel unfair. Still worth playing though.',
-            'created_at' => '2025-04-18 11:00:00',
-            'FName'      => 'Sam',
-            'LName'      => 'Patel',
-        ],
-    ];
-}
-// ── END MOCK DATA ────────────────────────────────────────────
 
 // ── Check if current user already reviewed ───────────────────
 $user_review = null;
@@ -149,7 +92,7 @@ $review_count = count($reviews);
 if ($review_count > 0) {
     $total = 0;
     foreach ($reviews as $r) {
-        $total += (float)($r['Score'] ?? $r['score'] ?? 0);
+        $total += (float)($r['Rating'] ?? $r['Rating'] ?? 0);
     }
     $avg_score = $total / $review_count;
 }
@@ -159,7 +102,7 @@ if ($review_count > 0) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title><?= $game ? htmlspecialchars($game['Title'] ?? $game['title'] ?? 'Game') : 'Game Not Found' ?> — Fishing for Games</title>
+  <title><?= $game ? htmlspecialchars($game['GName'] ?? $game['GName'] ?? 'Game') : 'Game Not Found' ?> — Fishing for Games</title>
   <link href="dashboard.css" rel="stylesheet">
   <link href="game-review.css" rel="stylesheet">
 </head>
@@ -218,14 +161,14 @@ if ($review_count > 0) {
     <?php if ($game): ?>
 
       <?php
-        $title       = htmlspecialchars($game['Title']       ?? $game['title']       ?? 'Untitled');
+        $title       = htmlspecialchars($game['GName']       ?? $game['GName']       ?? 'Untitled');
         $platform    = htmlspecialchars($game['Platform']    ?? $game['platform']    ?? '');
         $genre       = htmlspecialchars($game['Genre']       ?? $game['genre']       ?? '');
-        $developer   = htmlspecialchars($game['Developer']   ?? $game['developer']   ?? '');
-        $publisher   = htmlspecialchars($game['Publisher']   ?? $game['publisher']   ?? '');
-        $release     = $game['ReleaseDate'] ?? $game['release_date'] ?? null;
-        $description = htmlspecialchars($game['Description'] ?? $game['description'] ?? '');
-        $cover_url   = $game['CoverURL']    ?? $game['cover_url']    ?? null;
+        $developer   = htmlspecialchars($game['DSName']   ?? $game['DSName']   ?? '');
+        $publisher   = htmlspecialchars($game['PName']   ?? $game['PName']   ?? '');
+        $release     = $game['GReleaseDate'] ?? $game['GReleaseDate'] ?? null;
+        $description = htmlspecialchars($game['Description'] ?? $game['Description'] ?? '');
+        $cover_url   = $game['Cover_Image']    ?? $game['Cover_Image']    ?? null;
       ?>
 
       <!-- ── Game Hero Card ── -->
@@ -249,7 +192,7 @@ if ($review_count > 0) {
               <span class="meta-tag genre"><?= $genre ?></span>
             <?php endif; ?>
             <?php if ($release): ?>
-              <span class="meta-tag genre"><?= date('Y', strtotime($release)) ?></span>
+              <span class="meta-tag genre"><?= date('M j, Y', strtotime($release)) ?></span>
             <?php endif; ?>
           </div>
 
@@ -265,6 +208,12 @@ if ($review_count > 0) {
                 <div class="score-label <?= lure_class_game($avg_score) ?>"><?= lure_label($avg_score) ?></div>
                 Based on <?= $review_count ?> review<?= $review_count !== 1 ? 's' : '' ?>
               </div>
+              <?php if ($is_admin): ?>
+                <div class="admin-actions">
+                <a href="game_delete.php?id=<?= $game_id ?>" class="btn-delete" 
+                 onclick="return confirm('Are you sure you want to delete this game?');">Delete</a>
+                </div>
+                <?php endif; ?>
             </div>
           <?php else: ?>
             <div class="score-block">
@@ -330,7 +279,7 @@ if ($review_count > 0) {
               name="comment"
               rows="3"
               placeholder="Share your thoughts on this catch…"
-            ><?= $user_review ? htmlspecialchars($user_review['Comment'] ?? $user_review['comment'] ?? '') : '' ?></textarea>
+            ><?= $user_review ? htmlspecialchars($user_review['RText'] ?? $user_review['RText'] ?? '') : '' ?></textarea>
 
             <div class="review-form-actions">
               <span class="note">
@@ -360,12 +309,7 @@ if ($review_count > 0) {
             <span style="font-weight:normal;font-size:.75rem;color:var(--muted);margin-left:.4rem;">(<?= $review_count ?>)</span>
           <?php endif; ?>
         </div>
-        <?php if ($is_admin): ?>
-          <div class="admin-actions">
-            <a href="game_edit.php?id=<?= $game_id ?>" class="btn-edit">Edit Game</a>
-            <a href="game_delete.php?id=<?= $game_id ?>" class="btn-delete" onclick="return confirm('Are you sure you want to delete this game?');">Delete</a>
-          </div>
-        <?php endif; ?>
+            <!-- delete review if user -->
       </div>
 
       <?php if (!empty($reviews)): ?>
@@ -373,9 +317,9 @@ if ($review_count > 0) {
           <?php
             $r_name     = htmlspecialchars(($review['FName'] ?? '') . ' ' . ($review['LName'] ?? ''));
             $r_initials = strtoupper(substr($review['FName'] ?? '', 0, 1) . substr($review['LName'] ?? '', 0, 1));
-            $r_score    = (int)($review['Score'] ?? $review['score'] ?? 0);
-            $r_body     = htmlspecialchars($review['Comment'] ?? $review['comment'] ?? $review['Body'] ?? $review['body'] ?? '');
-            $r_date     = $review['created_at'] ?? $review['CreatedAt'] ?? null;
+            $r_score    = (int)($review['Rating'] ?? $review['Rating'] ?? 0);
+            $r_body     = htmlspecialchars($review['RText'] ?? $review['RText'] ?? $review['RText'] ?? $review['RText'] ?? '');
+            $r_date     = $review['Created_at'] ?? $review['Created_at'] ?? null;
             $is_own     = $is_logged_in && ($review['UID'] ?? null) == $user_id;
           ?>
           <div class="review-card <?= $is_own ? 'own-review' : '' ?>">
