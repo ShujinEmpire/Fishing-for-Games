@@ -55,6 +55,7 @@ function stat_value($val): string {
 
     <div class="nav-section">Navigate</div>
     <a href="dashboard.php" class="nav-link active">The Dock</a>
+    <a href="profile/profile.php" class="nav-link">Profile</a>
 
     <!-- Sidebar footer -->
     <div class="sidebar-footer">
