@@ -3,6 +3,7 @@ require_once("../auth.php");
 require_once("../config.php");
 
 require_login("../login.php");
+session_start();
 
 $pdo = get_pdo();
 
@@ -35,6 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $email,
         $_SESSION['user_id']
     ]);
+
+    $_SESSION['username'] = $_POST['FName'] . " " . $_POST['LName'];
 
     $_SESSION['email'] = $email;
 

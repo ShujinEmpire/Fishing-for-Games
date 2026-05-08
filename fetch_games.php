@@ -26,7 +26,7 @@ try {
             g.GReleaseDate,
             g.Description,
             g.Cover_Image,
-            COALESCE(AVG(r.Rating), 0) AS Rating,
+            g.Rating,
             COUNT(r.RID) AS ReviewCount
         FROM Game g
         LEFT JOIN Review r ON g.GID = r.GID

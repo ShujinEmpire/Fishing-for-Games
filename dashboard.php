@@ -4,22 +4,26 @@
 //  dashboard.php
 // ============================================================
 
+/*
+TODO: fix the date at the JS on the bottom from appearing a day off due to timezone issues. 
+It should show the correct release date regardless of the user's timezone.
+*/ 
+
 require_once("auth.php");
 require_once("config.php");
 session_start();
 $pdo = get_pdo();
 
 // ── Auth & User ──────────────────────────────────────────────
-$is_logged_in  = isset($_SESSION['user_id']);
-$is_admin      = isset($_SESSION['Type']) && (int)$_SESSION['Type'] === 1;;
+$is_logged_in  = is_logged_in();
+$is_admin      = is_admin();
 $user_name     = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : null;
 $user_email    = $is_logged_in ? htmlspecialchars($_SESSION['email']    ?? '')     : null;
 $user_initials = $is_logged_in ? strtoupper(substr($user_name, 0, 2))            : null;
 
-$total_catches  = null;
-$games_in_pond  = null;
-$on_the_hook    = null;
-$recent_catches = [];
+
+$flash_success = get_flash('flash_success');
+$flash_error   = get_flash('flash_error');
  
 // ── Helper: lure score CSS class ─────────────────────────────
 function lure_class(float $score): string {
@@ -56,10 +60,11 @@ function stat_value($val): string {
 
     <div class="nav-section">Navigate</div>
     <a href="dashboard.php" class="nav-link active">The Dock</a>
+    <a href="profile/profile.php" class="nav-link">Profile</a>
     <?php if($is_admin): ?>
         <div class="nav-section">Admin</div>
         <a href="create_game.php" class="nav-link">Create Game</a>
-    <?php endif; ?>
+    <?php endif; ?> 
 
     <!-- Sidebar footer -->
     <div class="sidebar-footer">
@@ -88,6 +93,7 @@ function stat_value($val): string {
 
     <!-- Topbar -->
     <div class="topbar">
+      
       <div class="topbar-title">
         <?php if (is_logged_in()): ?>
           <small>Welcome back, <?= $user_name ?></small>
@@ -100,6 +106,15 @@ function stat_value($val): string {
         </div>
       </div>
     </div>
+
+    <div class="topbar-flash"> 
+        <?php if ($flash_success): ?>
+          <div class="flash flash-success"><?= htmlspecialchars($flash_success) ?></div>
+        <?php endif; ?>
+        <?php if ($flash_error): ?>
+          <div class="flash flash-error"><?= htmlspecialchars($flash_error) ?></div>
+        <?php endif; ?>
+        </div> 
 
     <!-- ── Stat Cards ── -->
     <div class="stats">
@@ -121,20 +136,6 @@ function stat_value($val): string {
           <?= $games_in_pond !== null ? '' : 'No data yet' ?>
         </div>
       </div>
-
-      <!-- On the Hook (admin only) -->
-      <?php if ($is_admin): ?>
-        <div class="stat-card admin-card">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem;">
-            <div class="stat-label" style="margin:0;">On the Hook</div>
-            <span class="admin-badge">Admin</span>
-          </div>
-          <div class="stat-value"><?= stat_value($on_the_hook) ?></div>
-          <div class="stat-note">
-            <?= $on_the_hook !== null ? '' : 'No data yet' ?>
-          </div>
-        </div>
-      <?php endif; ?>
 
     </div>
 
@@ -261,7 +262,10 @@ function stat_value($val): string {
           else if (score >= 2.5) scoreClass = 'lure-mid';
 
           const reviews = parseInt(g.ReviewCount) || 0;
-          const released = g.GReleaseDate ? new Date(g.GReleaseDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+          const released = new Date(g.GReleaseDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          //fix the date appearing a day off due to timezone issues by using the 
+          // original date string and removing the time component
+
           const gameId = g.GID || 0;
 
           html += '<tr onclick="window.location=\'game.php?id=' + gameId + '\'" style="cursor:pointer;">';

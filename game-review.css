@@ -52,6 +52,12 @@
   flex-wrap: wrap;
 }
 
+.game-delete-top {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
 .game-cover {
   width: 180px;
   height: 240px;
@@ -408,3 +414,14 @@
   .game-info { min-width: 0; }
   .detail-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* ── Review Delete Button ── */
+.review-delete-wrap {
+  margin-top: .45rem;
+  text-align: right;
+}
+
+.review-delete-wrap .btn-delete {
+  font-family: inherit;
+}
+/* ── Review Delete Button ── */

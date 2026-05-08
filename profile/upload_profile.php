@@ -4,6 +4,7 @@ error_reporting(E_ALL);
 
 require_once("../auth.php");
 require_once("../config.php");
+session_start();
 
 require_login("../login.php");
 
@@ -16,7 +17,7 @@ if (!isset($_FILES["profile_image"]) || $_FILES["profile_image"]["error"] !== UP
 $uploadDir = __DIR__ . "/uploads/";
 
 if (!is_dir($uploadDir)) {
-    mkdir($uploadDir, 0755, true);
+   mkdir($uploadDir, 0755, true);
 }
 
 $extension = strtolower(pathinfo($_FILES["profile_image"]["name"], PATHINFO_EXTENSION));

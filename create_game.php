@@ -4,11 +4,6 @@
 //  create_game.php
 // ============================================================
 
-/*
-TODO: check if game alreadt exists (by name) and prevent duplicates. 
-thus you need to make GName unique
-*/
-
 require_once("auth.php");
 require_once("config.php");
 session_start();
@@ -18,6 +13,9 @@ $is_logged_in = is_logged_in();
 $user_name = $is_logged_in ? htmlspecialchars($_SESSION['username'] ?? 'User') : null;
 $user_email = $is_logged_in ? htmlspecialchars($_SESSION['email']    ?? '') : null;
 $user_initials = $is_logged_in ? strtoupper(substr($user_name, 0, 2)) : null;
+
+$flash_success = get_flash('flash_success');
+$flash_error   = get_flash('flash_error');
 
 // ── variables for game ──────────────────────────────────────────────
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -30,52 +28,71 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $description = trim($_POST['description'] ?? '');
     $cover_Image = trim($_POST['cover_url'] ?? '');
 
+    $stmt = $pdo->prepare('SELECT GName FROM Game WHERE GName = ?');
+    $stmt->execute([$gname]);
+    $game_exists = $stmt->fetch(PDO::FETCH_ASSOC);
+
     try{
-        $stmt = $pdo->prepare('SELECT DSName FROM DeveloperStudio WHERE DSName = ?');
-        $stmt->execute([$developer]);
-        $developer_row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        $stmt = $pdo->prepare('SELECT PName FROM Publisher WHERE PName = ?');
-        $stmt->execute([$publisher]);
-        $publisher_row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($developer_row && !$publisher_row) {
-            $DSName = $developer_row['DSName'];
-            $stmt = $pdo->prepare('CALL MakeGame(?,?,?,?,?,?,?,?)');
-            $stmt->execute([$gname, $genre, $platforms, $publisher, $DSName, $release_date, $description, $cover_Image]);
-            echo("<p style='color: green;'><strong>Success:</strong> Game created successfully.</p>");
-        }elseif ($publisher_row && !$developer_row) {
-            $PName = $publisher_row['PName'];
-            $stmt = $pdo->prepare('CALL MakeGame(?,?,?,?,?,?,?,?)');
-            $stmt->execute([$gname, $genre, $platforms, $PName, $developer, $release_date, $description, $cover_Image]);
-            echo("<p style='color: green;'><strong>Success:</strong> Game created successfully.</p>");
-        }else if ($developer_row && $publisher_row) {
-            $DSName = $developer_row['DSName'];
-            $PName = $publisher_row['PName'];
-            $stmt = $pdo->prepare('CALL MakeGame(?,?,?,?,?,?,?,?)');
-            $stmt->execute([$gname, $genre, $platforms, $PName, $DSName, $release_date, $description, $cover_Image]);
-            echo("<p style='color: green;'><strong>Success:</strong> Game created successfully.</p>");
+        if ($game_exists) {
+            set_flash('flash_error', 'A game with that name already exists. Please choose a different name.');
+            header('Location: create_game.php');
+            exit();
         }else{
-        
-        $stmt = $pdo->prepare('
-        INSERT INTO Publisher(PName) Values(?)
-        ');
-        $stmt->execute([$publisher]);
+          $stmt = $pdo->prepare('SELECT DSName FROM DeveloperStudio WHERE DSName = ?');
+          $stmt->execute([$developer]);
+          $developer_row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-         $stmt = $pdo->prepare('
-        INSERT INTO DeveloperStudio(DSName) Values(?)
-        ');
-        $stmt->execute([$developer]);
+          $stmt = $pdo->prepare('SELECT PName FROM Publisher WHERE PName = ?');
+          $stmt->execute([$publisher]);
+          $publisher_row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+          if ($developer_row && !$publisher_row) {
+              $stmt = $pdo->prepare('INSERT INTO Publisher(PName) Values(?)');
+              $stmt->execute([$publisher]);
+              $DSName = $developer_row['DSName'];
+              $stmt = $pdo->prepare('CALL MakeGame(?,?,?,?,?,?,?,?)');
+              $stmt->execute([$gname, $genre, $platforms, $publisher, $DSName, $release_date, $description, $cover_Image]);
+              set_flash('flash_success', 'Game created successfully.');
+              header('Location: dashboard.php');
+              exit();
+          }elseif ($publisher_row && !$developer_row) {
+              $stmt = $pdo->prepare('INSERT INTO DeveloperStudio(DSName) Values(?)');
+              $stmt->execute([$developer]);
+              $PName = $publisher_row['PName'];
+              $stmt = $pdo->prepare('CALL MakeGame(?,?,?,?,?,?,?,?)');
+              $stmt->execute([$gname, $genre, $platforms, $PName, $developer, $release_date, $description, $cover_Image]);
+              set_flash('flash_success', 'Game created successfully.');
+              header('Location: dashboard.php');
+             exit();
+         }else if ($developer_row && $publisher_row) {
+              $DSName = $developer_row['DSName'];
+              $PName = $publisher_row['PName'];
+              $stmt = $pdo->prepare('CALL MakeGame(?,?,?,?,?,?,?,?)');
+              $stmt->execute([$gname, $genre, $platforms, $PName, $DSName, $release_date, $description, $cover_Image]);
+              set_flash('flash_success', 'Game created successfully.');
+              header('Location: dashboard.php');
+              exit();
+          }else{
+            $stmt = $pdo->prepare('
+            INSERT INTO Publisher(PName) Values(?)');
+            $stmt->execute([$publisher]);
+
+            $stmt = $pdo->prepare('
+            INSERT INTO DeveloperStudio(DSName) Values(?)');
+            $stmt->execute([$developer]);
         
-        $stmt = $pdo->prepare('
-        CALL MakeGame(?,?,?,?,?,?,?,?)
-        ');
-        $stmt->execute([$gname, $genre, $platforms, $publisher, $developer, $release_date, $description, $cover_Image]);
-        echo("<p style='color: green;'><strong>Success:</strong> Game created successfully.</p>");
+            $stmt = $pdo->prepare('
+            CALL MakeGame(?,?,?,?,?,?,?,?)');
+            $stmt->execute([$gname, $genre, $platforms, $publisher, $developer, $release_date, $description, $cover_Image]);
+            set_flash('flash_success', 'Game created successfully.');
+            header('Location: dashboard.php');
+            exit();
+          }
         }
-    }
-    catch (PDOException $e) {
-        echo "<p style='color: red;'><strong>Error:</strong> " . $e->getMessage() . "</p>";
+    } catch (PDOException $e) {
+        set_flash('flash_error', 'Could not create the game: ' . $e->getMessage());
+        header('Location: create_game.php');
+        exit();
     }
 
 }
@@ -88,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Create Game — Fishing for Games</title>
   <link href="dashboard.css" rel="stylesheet">
-  <link href="create_game_style.css" rel="stylesheet">
+  <link href="create_game_style.css?v=2" rel="stylesheet">
   </head>
 
 <body>
@@ -103,6 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <div class="nav-section">Navigate</div>
     <a href="dashboard.php" class="nav-link">The Dock</a>
+    <a href="profile/profile.php" class="nav-link">Profile</a>
     <div class="nav-section">Admin</div>
     <a href="create_game.php" class="nav-link active">Create Game</a>
  <!-- Sidebar footer -->
@@ -136,6 +154,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       </svg>
       Back to The Dock
     </a>
+
+    <div class="topbar-flash"> 
+        <?php if ($flash_success): ?>
+          <div class="flash flash-success"><?= htmlspecialchars($flash_success) ?></div>
+        <?php endif; ?>
+        <?php if ($flash_error): ?>
+          <div class="flash flash-error"><?= htmlspecialchars($flash_error) ?></div>
+        <?php endif; ?>
+        </div> 
 
     <section class="create-hero">
       <h1 class="create-heading">Create a New Catch</h1>

@@ -4,10 +4,6 @@
 //  game.php
 // ============================================================
 
-/* 
-TODO: add delete to admin actions, and add check in game_delete.php to prevent 
-non-admins from deleting. aswell as for reviews.
-*/
 
 require_once("auth.php");
 require_once("config.php");
@@ -49,7 +45,7 @@ if ($game) {
             FROM Review r
             JOIN User u ON r.UID = u.UID
             WHERE r.GID = ?
-            ORDER BY r.created_at DESC
+            ORDER BY r.Created_at DESC
         ");
         $stmt->execute([$game_id]);
         $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -87,15 +83,9 @@ function lure_label(float $score): string {
 }
 
 // Compute average score from reviews (1–5 scale)
-$avg_score = 0;
+
 $review_count = count($reviews);
-if ($review_count > 0) {
-    $total = 0;
-    foreach ($reviews as $r) {
-        $total += (float)($r['Rating'] ?? $r['Rating'] ?? 0);
-    }
-    $avg_score = $total / $review_count;
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -116,8 +106,13 @@ if ($review_count > 0) {
       <small>Admin Dashboard</small>
     </div>
 
-    <div class="nav-section">Navigate</div>
-    <a href="dashboard.php" class="nav-link">The Dock</a>
+      <div class="nav-section">Navigate</div>
+    <a href="dashboard.php" class="nav-link active">The Dock</a>
+    <a href="profile/profile.php" class="nav-link">Profile</a>
+    <?php if($is_admin): ?>
+        <div class="nav-section">Admin</div>
+        <a href="create_game.php" class="nav-link">Create Game</a>
+    <?php endif; ?> 
 
     <!-- Sidebar footer -->
     <div class="sidebar-footer">
@@ -169,11 +164,23 @@ if ($review_count > 0) {
         $release     = $game['GReleaseDate'] ?? $game['GReleaseDate'] ?? null;
         $description = htmlspecialchars($game['Description'] ?? $game['Description'] ?? '');
         $cover_url   = $game['Cover_Image']    ?? $game['Cover_Image']    ?? null;
+        $avg_score = $game['Rating'] ?? $game['Rating'] ?? 0;
       ?>
-
+      
       <!-- ── Game Hero Card ── -->
-      <div class="game-hero">
-        <div class="game-cover">
+     <div class="game-hero">
+
+      <?php if ($is_admin): ?>
+        <a
+        href="game_delete.php?game_id=<?= (int)$game_id ?>"
+        class="btn-delete game-delete-top"
+        onclick="return confirm('Are you sure you want to delete this game?');"
+       >
+        Delete Game
+        </a>
+     <?php endif; ?>
+
+      <div class="game-cover">
           <?php if ($cover_url): ?>
             <img src="<?= htmlspecialchars($cover_url) ?>" alt="<?= $title ?> cover">
           <?php else: ?>
@@ -196,7 +203,7 @@ if ($review_count > 0) {
             <?php endif; ?>
           </div>
 
-          <?php if ($description): ?>
+          <?php if ($description): ?>       <!-- New line break for description -->
             <p class="game-description"><?= nl2br($description) ?></p>
           <?php endif; ?>
 
@@ -208,12 +215,6 @@ if ($review_count > 0) {
                 <div class="score-label <?= lure_class_game($avg_score) ?>"><?= lure_label($avg_score) ?></div>
                 Based on <?= $review_count ?> review<?= $review_count !== 1 ? 's' : '' ?>
               </div>
-              <?php if ($is_admin): ?>
-                <div class="admin-actions">
-                <a href="game_delete.php?id=<?= $game_id ?>" class="btn-delete" 
-                 onclick="return confirm('Are you sure you want to delete this game?');">Delete</a>
-                </div>
-                <?php endif; ?>
             </div>
           <?php else: ?>
             <div class="score-block">
@@ -309,7 +310,6 @@ if ($review_count > 0) {
             <span style="font-weight:normal;font-size:.75rem;color:var(--muted);margin-left:.4rem;">(<?= $review_count ?>)</span>
           <?php endif; ?>
         </div>
-            <!-- delete review if user -->
       </div>
 
       <?php if (!empty($reviews)): ?>
@@ -344,6 +344,29 @@ if ($review_count > 0) {
                     <span class="<?= $s <= $r_score ? '' : 'empty' ?>">&#9733;</span>
                   <?php endfor; ?>
                 </span>
+                <?php if ($is_own): ?>
+                  <div class="review-delete-wrap">
+                    <a
+                      href="delete_review.php?rid=<?= (int)$review['RID'] ?>&game_id=<?= (int)$game_id ?>"
+                      class="btn-delete"
+                      onclick="return confirm('Are you sure you want to delete this review?');"
+                    >
+                    Delete Review
+                  </a>
+               </div>
+                <?php endif; ?>
+                <?php if ($is_admin): ?>
+                  <div class="review-delete-wrap">
+                    <a
+                      href="delete_review.php?rid=<?= (int)$review['RID'] ?>&game_id=<?= (int)$game_id ?>"
+                      class="btn-delete"
+                      onclick="return confirm('Are you sure you want to delete this review?');"
+                    >
+                    Delete Review
+                  </a>
+               </div>
+                <?php endif; ?>
+                </div>
               </div>
             </div>
             <?php if ($r_body): ?>

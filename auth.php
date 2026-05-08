@@ -11,7 +11,7 @@ function is_logged_in(): bool
 
 function is_admin(): bool
 {
-    return is_logged_in() && isset($_SESSION['Type']) && $_SESSION['Type'] === 1;
+    return is_logged_in() && isset($_SESSION['Type']) && (int)$_SESSION['Type'] === 1;
 }
 
 function require_login(string $redirect = 'login.php'): void

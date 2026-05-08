@@ -3,8 +3,11 @@ require_once("../auth.php");
 require_once("../config.php");
 
 require_login("../login.php");
+session_start();
 
 $pdo = get_pdo();
+
+$is_admin = is_admin();
 
 $stmt = $pdo->prepare("
     SELECT UID, FName, LName, Email, PhoneNum, Profile_Image
@@ -18,7 +21,7 @@ if (!$user) {
     die("User not found.");
 }
 
-$fullName = $user['FName'] . " " . $user['LName'];
+$fullName = $_SESSION['username'] ?? ($user['FName'] . " " . $user['LName']);
 
 $profileImage = !empty($user['Profile_Image'])
     ? $user['Profile_Image']
@@ -47,6 +50,10 @@ $profileImage = !empty($user['Profile_Image'])
   <div class="nav-section">Navigate</div>
   <a href="../dashboard.php" class="nav-link">The Dock</a>
   <a href="profile.php" class="nav-link active">Profile</a>
+  <?php if($is_admin): ?>
+        <div class="nav-section">Admin</div>
+        <a href="../create_game.php" class="nav-link">Create Game</a>
+    <?php endif; ?> 
 
   <div class="sidebar-footer">
     <a href="../logout.php" class="btn-signin">Sign Out</a>
