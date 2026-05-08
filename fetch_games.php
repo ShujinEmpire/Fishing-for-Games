@@ -30,9 +30,6 @@ $stmt = $pdo->prepare("
             COUNT(r.RID) AS ReviewCount
         FROM Game g
         LEFT JOIN Review r ON g.GID = r.GID
-        WHERE
-            :term = ''
-            OR g.GName LIKE :like1
         GROUP BY
             g.GID,
             g.GName,
