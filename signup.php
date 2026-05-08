@@ -61,6 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <html>
     <link href="style.css" rel="stylesheet">
+    <link href= "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"  rel="stylesheet" > 
 <body>
     <?php include 'main.php';?>
     <div class="container d-flex justify-content-center align-items-center vh-100">
@@ -76,28 +77,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <h2 class="text-center text-white mb-4 signup-title"> Sign Up </h2>
     <form method="POST">
     <!--FNAME-->
+        <div class="input-wrapper mb-3">
+            <i class="fa-solid fa-id-card input-icon"></i>
         <input type="text" class="form-control neon-input mb-3"  id ="FName" name="FName" placeholder="First Name" aria-describedby="emailHelp" required>
-
+</div>
     <!--LNAME-->
+         <div class="input-wrapper mb-3">
+            <i class="fa-solid fa-id-card input-icon"></i>
         <input type="text" class="form-control neon-input mb-3" id="LName" name="LName" placeholder="Last Name" aria-describedby="emailHelp" required>
-
+       </div>
 
     <!--Phone number-->
-
+<div class="input-wrapper mb-3">
+            <i class="fa-solid fa-mobile-screen input-icon"></i>
         <input type="tel" class="form-control neon-input mb-3" id="PhoneNum" name="PhoneNum"
         placeholder="xxx-xxx-xxxx" aria-describedby="emailHelp" required>
 
-
+</div>
     <!--EMAIL-->
-
+        <div class="input-wrapper mb-3">
+            <i class="fa-solid fa-at input-icon"></i>
         <input type="email" class="form-control neon-input mb-3" id="Email" name="Email" placeholder="Email"
         aria-describedby="emailHelp" required>
-
+</div>
     <!--PASSWORD-->
-
+ <div class="input-wrapper mb-3">
+            <i class="fa-solid fa-key input-icon"></i>
         <input type="password" class="form-control neon-input mb-3" id="Password" name="Password" placeholder="Password">
        <div class="form-check text-white mb-3" required>
-
+</div>
         <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
         <label class="form-check-label">
             I accept the Terms and Conditions
