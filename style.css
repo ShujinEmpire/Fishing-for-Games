@@ -226,7 +226,26 @@ body{
     color: #cfffff;
     text-shadow: 0 0 8px rgba(0, 224, 198, 0.9), 0 0 20px rgba(0, 224, 198, 0.45);
     font-family: 'Audiowide',sans-serif;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
+    position:relative;
+    animation: glitch 2.5s infinite;
+}
+@keyframes glitch{
+    0%{
+        tranform:translateX(0);
+    }
+    2%{
+        tranform:translateX(-2px);
+    }
+    4%{
+        tranform:translateX(2px);
+    }
+    6%{
+        tranform:translateX(0);
+    }
+    100%{
+        tranform:translateX(0);
+    }
 }
 
 .login-sub{
