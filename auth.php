@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <?php
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -49,5 +47,4 @@ function get_flash(string $key): ?string
 
     return $value;
 }
->>>>>>> origin/Alexis
 
