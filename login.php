@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<?php include 'main.php';i
+<?php include 'main.php';
         //echo("here 4");
 ?>
  
