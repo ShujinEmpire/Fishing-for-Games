@@ -231,22 +231,22 @@ body{
 }
 @keyframes glitch{
     0%{
-        tranform:translateX(0);
+        tranform:translate(0);
     }
     20%{
-        tranform:translateX(-4px);
+        tranform:translate(-1px,1px);
     }
     40%{
-        tranform:translateX(4px);
+        tranform:translate(1px,-1px);
     }
     60%{
-        tranform:translateX(-3px);
+        tranform:translate(-1px,0);
     }
     80%{
-        tranform:translateX(3px);
+        tranform:translate(1px,1px);
     }
     100%{
-        tranform:translateX(0);
+        tranform:translate(0);
     }
 }
 
