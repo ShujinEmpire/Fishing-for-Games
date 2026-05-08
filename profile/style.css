@@ -1,0 +1,84 @@
+.profile-card {
+  max-width: 750px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  padding: 2rem;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.avatar-box {
+  width: 110px;
+  height: 110px;
+  border: 2px solid var(--border);
+  border-radius: 5px; /* change to 0 if you want sharp corners */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--teal);
+}
+
+.profile-email {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.profile-info {
+  display: grid;
+  gap: 1rem;
+}
+
+.info-row {
+  background: var(--bg);
+  border: 1px solid var(--border-dim);
+  padding: 1rem;
+}
+
+.info-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.5rem;
+  background: var(--bg);
+  border: 1px solid var(--border-dim);
+  color: var(--text);
+}
+
+.upload-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
