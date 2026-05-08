@@ -13,8 +13,42 @@ $term = trim($_POST['search'] ?? '');
 $like = "%" . $term . "%";
 
 try {
-    $pdo = get_pdo();
-
+     $pdo = get_pdo();
+    if($term == ''){
+$stmt = $pdo->prepare("
+        SELECT
+            g.GID,
+            g.GName,
+            g.Platforms,
+            g.Genre,
+            g.DSName,
+            g.PName,
+            g.GReleaseDate,
+            g.Description,
+            g.Cover_Image,
+            COALESCE(AVG(r.Rating), 0) AS Rating,
+            COUNT(r.RID) AS ReviewCount
+        FROM Game g
+        LEFT JOIN Review r ON g.GID = r.GID
+        WHERE
+            :term = ''
+            OR g.GName LIKE :like1
+        GROUP BY
+            g.GID,
+            g.GName,
+            g.Platforms,
+            g.Genre,
+            g.DSName,
+            g.PName,
+            g.GReleaseDate,
+            g.Description,
+            g.Cover_Image
+        ORDER BY ReviewCount DESC
+        LIMIT 10
+    ");
+      $stmt->execute();
+    }else{
+    
     $stmt = $pdo->prepare("
         SELECT
             g.GID,
@@ -50,6 +84,7 @@ try {
         ':term' => $term,
         ':like1' => $like,
     ]);
+}
 
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     exit;
