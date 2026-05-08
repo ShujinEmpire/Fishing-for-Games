@@ -1,38 +1,3 @@
-<<<<<<< HEAD
-<html>
-<body class="login-page">
-    <?php include 'main.php';?>
-    
-    <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="login-box">
-            <h2 class="login-title">Login</h2>
-            <p class="login-sub">
-                Welcome back! Please login to continue exploring games.</p>
-     <form>
-    <div class="mb-3 position-relative">
-        <i class="bi bi-envelope input-icon"></i>
-    
-       <!-- <label for="input" class="form-label">Email address</label> -->
-        
-       <input type="email" class="form-control " id="email"  name="email" placeholder="Email Address" aria-describedby="emailHelp">
-    </div>
-
-    <div class="mb-3 position-relative">
-            <i class="bi bi-lock input-icon"></i>
-       <!--<label for="input" class="form-label">Password</label> -->
-        <input type="password" class="form-control " id="password" name="password" placeholder="Password">
-    </div>
-    <button type="submit" class="login-btn">Log in</button>
-</form>
-  <!-- the link-->
-   <p class="login-link text-center mt-3">
-    Don't have an account?
-    <a href="signup.php">Sign Up</a> </p>
-</div>
-</div>
-</body>
-</html>
-=======
 <?php
 require_once("config.php");
 require_once("auth.php");
@@ -96,61 +61,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //echo("here 4");
 ?>
  
-<!--
-<html>
-<body>
-    <form method="POST">
-    <div class="mb-3">
-        <label for="input" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="input" aria-describedby="emailHelp" name = "email">
-    </div>
-    <div class="mb-3">
-        <label for="input" class="form-label">Password</label>
-        <input type="password" class="form-control" id="input" name = "password">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-    <p class="mt-3">
-        Don't have an account?
-        <a href="signup.php">Sign up here</a>
-    </p>
-
-    </form>
-</body>
-</html
--->
 
 <html>
     <link href="style.css" rel="stylesheet">
-<body>
+<body class="login-page">
     <?php include 'main.php';?>
     <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="signup-box row g-0">
-    <!--This is the left side (image) -->
-    <div class="col-md-6 left-side d-flex align-items-end">
-    <div class="overlay-text">
-            <h2>Welcome Back!</h2>
-                <p>Sign in to your account</p>
-</div>
-</div>
-<div class="col-md-6 right-side">
-    <h2 class="text-center text-white mb-4 signup-title"> Sign IN </h2>
-    <form method="POST">
-  <div class="mb-3">
+        <div class="login-box">
+        <h2 class="login-title">Login </h2>
+        <p class="login-sub">
+            Welcome Back! Please login to continue exploring games.</p>
+
+<form method="POST">
+<div class="mb-3 position-relative">
+    <i class="bi bi-envelope input-icon"></i>
+
         <input type="email" class="form-control neon-input mb-3" id="input" name="email" placeholder="Email"
         aria-describedby="emailHelp" required>
     </div>
-    <div class="mb-3">
-        <input type="password" class="form-control neon-input mb-3" id="input" name="password" placeholder="Password">
-        <div class="form-check text-white mb-3" required> 
-        </div>
-    <button type="submit" class="btn neon-btn w-100 mb-3">Log in</button>
+    
+    <div class="mb-3 position-relative">
+    <i class="bi bi-lock input-icon"></i>
+
+    <input type="password" class="form-control neon-input mb-3" id="input" name="password" placeholder="Password">
+</div>
+    <button type="submit" class="login-btn">Log in</button>
+</form>
     <p class="login-link text-center mt-3">
         Don't have an account?
         <a href="signup.php">Sign up here</a>
-    </form>
-</div>
 </div>
 </div>
 </body>
 </html>
->>>>>>> origin/Alexis
