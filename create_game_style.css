@@ -1,0 +1,251 @@
+/* ============================================================
+   Fishing for Games - Create Game Page Styles
+   create_game_style.css
+   ============================================================ */
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: .82rem;
+  margin-bottom: 1.5rem;
+  transition: color .2s;
+}
+
+.back-link:hover {
+  color: var(--teal);
+}
+
+.back-link svg {
+  width: 14px;
+  height: 14px;
+}
+
+.flash {
+  padding: .7rem 1rem;
+  font-size: .82rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid;
+}
+
+.flash-success {
+  color: var(--teal);
+  border-color: var(--border);
+  background: rgba(0, 224, 198, .06);
+}
+
+.flash-error {
+  color: #f87171;
+  border-color: #f87171;
+  background: rgba(248, 113, 113, .06);
+}
+
+.create-hero {
+  background: var(--card);
+  border: 2px solid var(--border);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.create-heading {
+  color: var(--teal);
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: .3rem;
+}
+
+.create-subtitle {
+  color: var(--muted);
+  font-size: .85rem;
+  line-height: 1.6;
+  max-width: 700px;
+}
+
+.create-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.cover-preview-card {
+  background: var(--card);
+  border: 2px solid var(--border-dim);
+  padding: 1rem;
+}
+
+.cover-preview {
+  width: 100%;
+  height: 320px;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cover-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.cover-placeholder {
+  color: var(--muted);
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  text-align: center;
+  padding: 1rem;
+}
+
+.preview-note {
+  margin-top: .8rem;
+  color: var(--muted);
+  font-size: .72rem;
+  line-height: 1.5;
+}
+
+.form-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  padding: 1.5rem;
+}
+
+.form-section-title {
+  color: var(--teal);
+  font-size: .9rem;
+  font-weight: bold;
+  margin-bottom: 1.2rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+}
+
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  color: var(--muted);
+  font-size: .65rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-weight: bold;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border-dim);
+  color: var(--text);
+  padding: .8rem 1rem;
+  font-size: .85rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--muted);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--border);
+  box-shadow: 0 0 0 1px rgba(0, 224, 198, .15);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.form-actions {
+  margin-top: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  flex-wrap: wrap;
+}
+
+.form-note {
+  color: var(--muted);
+  font-size: .72rem;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border-dim);
+  padding: .55rem 1rem;
+  font-size: .78rem;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.btn-secondary:hover {
+  color: var(--teal);
+  border-color: var(--border);
+}
+
+.button-row {
+  display: flex;
+  gap: .6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.error-list {
+  border: 1px solid #f87171;
+  background: rgba(248, 113, 113, .06);
+  color: #f87171;
+  padding: .9rem 1rem;
+  margin-bottom: 1.2rem;
+  font-size: .82rem;
+}
+
+.error-list ul {
+  margin: .4rem 0 0 1.2rem;
+  padding: 0;
+}
+
+@media (max-width: 900px) {
+  .create-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cover-preview {
+    height: 220px;
+  }
+}
+
+@media (max-width: 650px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .create-hero,
+  .form-card {
+    padding: 1.2rem;
+  }
+}
