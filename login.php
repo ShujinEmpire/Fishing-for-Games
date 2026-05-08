@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <html>
     <link href="style.css" rel="stylesheet">
-<body>
+<body class="login-page"> 
     <?php include 'main.php';?>
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="login-box">
