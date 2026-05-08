@@ -228,20 +228,23 @@ body{
     font-family: 'Audiowide',sans-serif;
     letter-spacing: 4px;
     position:relative;
-    animation: glitch 2.5s infinite;
+    animation: glitch 0.6s infinite;
 }
 @keyframes glitch{
     0%{
         tranform:translateX(0);
     }
-    2%{
-        tranform:translateX(-2px);
+    20%{
+        tranform:translateX(-4px);
     }
-    4%{
-        tranform:translateX(2px);
+    40%{
+        tranform:translateX(4px);
     }
-    6%{
-        tranform:translateX(0);
+    60%{
+        tranform:translateX(-3px);
+    }
+    80%{
+        tranform:translateX(3px);
     }
     100%{
         tranform:translateX(0);
