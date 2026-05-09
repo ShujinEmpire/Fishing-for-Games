@@ -30,22 +30,19 @@ $game = null;
 $reviews = [];
 
 try {
-    $stmt = $pdo->prepare("SELECT * FROM Game WHERE GID = ?");
+    $stmt = $pdo->prepare("SELECT * FROM GameRating WHERE GID = ?");
     $stmt->execute([$game_id]);
     $game = $stmt->fetch(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    // Table/column may not exist yet
+    set_flash('flash_error', 'Could not fetch Game: ' . $e->getMessage());
 }
 
 // ── Fetch reviews for this game ──────────────────────────────
 if ($game) {
     try {
         $stmt = $pdo->prepare("
-            SELECT r.*, u.FName, u.LName
-            FROM Review r
-            JOIN User u ON r.UID = u.UID
-            WHERE r.GID = ?
-            ORDER BY r.Created_at DESC
+            SELECT * FROM GameReviews
+            WHERE GID = ?
         ");
         $stmt->execute([$game_id]);
         $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -82,9 +79,8 @@ function lure_label(float $score): string {
     return 'Throw It Back';
 }
 
-// Compute average score from reviews (1–5 scale)
-
-$review_count = count($reviews);
+//Get review count for display
+$review_count = $game['ReviewCount'] ?? 0;
 
 ?>
 <!DOCTYPE html>
@@ -112,6 +108,7 @@ $review_count = count($reviews);
     <?php if($is_admin): ?>
         <div class="nav-section">Admin</div>
         <a href="create_game.php" class="nav-link">Create Game</a>
+        <a href="User_Stats.php" class="nav-link">User Stats</a>
     <?php endif; ?> 
 
     <!-- Sidebar footer -->
@@ -164,7 +161,7 @@ $review_count = count($reviews);
         $release     = $game['GReleaseDate'] ?? $game['GReleaseDate'] ?? null;
         $description = htmlspecialchars($game['Description'] ?? $game['Description'] ?? '');
         $cover_url   = $game['Cover_Image']    ?? $game['Cover_Image']    ?? null;
-        $avg_score = $game['Rating'] ?? $game['Rating'] ?? 0;
+        $rating = $game['Rating'] ?? $game['Rating'] ?? 0;
       ?>
       
       <!-- ── Game Hero Card ── -->
@@ -210,9 +207,9 @@ $review_count = count($reviews);
           <!-- Average lure score -->
           <?php if ($review_count > 0): ?>
             <div class="score-block">
-              <div class="big-score <?= lure_class_game($avg_score) ?>"><?= number_format($avg_score, 1) ?></div>
+              <div class="big-score <?= lure_class_game($rating) ?>"><?= number_format($rating, 1) ?></div>
               <div class="score-details">
-                <div class="score-label <?= lure_class_game($avg_score) ?>"><?= lure_label($avg_score) ?></div>
+                <div class="score-label <?= lure_class_game($rating) ?>"><?= lure_label($rating) ?></div>
                 Based on <?= $review_count ?> review<?= $review_count !== 1 ? 's' : '' ?>
               </div>
             </div>

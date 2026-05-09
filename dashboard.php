@@ -64,6 +64,7 @@ function stat_value($val): string {
     <?php if($is_admin): ?>
         <div class="nav-section">Admin</div>
         <a href="create_game.php" class="nav-link">Create Game</a>
+        <a href="User_Stats.php" class="nav-link">User Stats</a>
     <?php endif; ?> 
 
     <!-- Sidebar footer -->
@@ -122,19 +123,15 @@ function stat_value($val): string {
       <!-- Total Catches -->
       <div class="stat-card">
         <div class="stat-label">Total Catches</div>
-        <div id="stat-catches" class="stat-value"><?= stat_value($total_catches) ?></div>
-        <div id="stat-catches-note" class="stat-note">
-          <?= $total_catches !== null ? '' : 'No data yet' ?>
-        </div>
+        <div id="stat-catches" class="stat-value">0</div>
+        <div id="stat-catches-note" class="stat-note">Loading reviews...</div>
       </div>
 
       <!-- Games in Pond -->
       <div class="stat-card">
         <div class="stat-label">Games in Pond</div>
-        <div id="stat-games" class="stat-value"><?= stat_value($games_in_pond) ?></div>
-        <div id="stat-games-note" class="stat-note">
-          <?= $games_in_pond !== null ? '' : 'No data yet' ?>
-        </div>
+        <div id="stat-games" class="stat-value">0</div>
+        <div id="stat-games-note" class="stat-note">Loading games...</div>
       </div>
 
     </div>
@@ -154,36 +151,11 @@ function stat_value($val): string {
           </tr>
         </thead>
         <tbody id="game-results">
-          <?php if (!empty($recent_catches)): ?>
-            <?php foreach ($recent_catches as $catch): ?>
-              <tr>
-                <td>
-                  <span class="game-title"><?= htmlspecialchars($catch['GName']) ?></span>
-                </td>
-                <td>
-                  <span class="platform-tag"><?= htmlspecialchars($catch['Platforms']) ?></span>
-                </td>
-                <td>
-                  <span class="avatar"><?= strtoupper(substr($catch['Cover_Image'], 0, 2)) ?></span>
-                  <?= htmlspecialchars($catch['Cover_Image']) ?>
-                </td>
-                <td>
-                  <span class="lure <?= lure_class((float)$catch['Rating']) ?>">
-                    <?= number_format((float)$catch['Rating'], 1) ?>
-                  </span>
-                </td>
-                <td class="date-col">
-                  <?= date('M j', strtotime($catch['GReleaseDate'])) ?>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <tr>
-              <td colspan="6">
-                <div class="empty-state">No catches yet — the waters are quiet.</div>
-              </td>
-            </tr>
-          <?php endif; ?>
+          <tr>
+            <td colspan="6">
+              <div class="empty-state">Loading games...</div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -192,6 +164,27 @@ function stat_value($val): string {
  <script>
     // ── Live Search ──────────────────────────────────────────
     let searchTimeout = null;
+
+    function formatReleaseDate(dateString) {
+  if (!dateString) return '';
+
+  const dateOnly = dateString.split(' ')[0].split('T')[0];
+  const parts = dateOnly.split('-');
+
+  if (parts.length !== 3) return dateString;
+
+  const year = Number(parts[0]);
+  const month = Number(parts[1]) - 1;
+  const day = Number(parts[2]);
+
+  const localDate = new Date(year, month, day);
+
+  return localDate.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+}
 
     function searchGames(query) {
       // Debounce: wait 200ms after the user stops typing
@@ -248,7 +241,7 @@ function stat_value($val): string {
 
         // No results
         if (games.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state">No catches found — try a different search.</div></td></tr>';
+          tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state">No catches found.</div></td></tr>';
           return;
         }
 
@@ -262,10 +255,7 @@ function stat_value($val): string {
           else if (score >= 2.5) scoreClass = 'lure-mid';
 
           const reviews = parseInt(g.ReviewCount) || 0;
-          const released = new Date(g.GReleaseDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-          //fix the date appearing a day off due to timezone issues by using the 
-          // original date string and removing the time component
-
+          const released = formatReleaseDate(g.GReleaseDate);
           const gameId = g.GID || 0;
 
           html += '<tr onclick="window.location=\'game.php?id=' + gameId + '\'" style="cursor:pointer;">';

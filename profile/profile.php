@@ -53,6 +53,7 @@ $profileImage = !empty($user['Profile_Image'])
   <?php if($is_admin): ?>
         <div class="nav-section">Admin</div>
         <a href="../create_game.php" class="nav-link">Create Game</a>
+        <a href="../User_Stats.php" class="nav-link">User Stats</a>
     <?php endif; ?> 
 
   <div class="sidebar-footer">

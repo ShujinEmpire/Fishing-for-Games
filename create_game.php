@@ -123,6 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <a href="profile/profile.php" class="nav-link">Profile</a>
     <div class="nav-section">Admin</div>
     <a href="create_game.php" class="nav-link active">Create Game</a>
+    <a href="User_Stats.php" class="nav-link">User Stats</a>
  <!-- Sidebar footer -->
     <div class="sidebar-footer">
       <?php if (is_logged_in()): ?>
@@ -216,6 +217,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 name="genre"
                 placeholder="Example: Action RPG"
                 value="<?= htmlspecialchars($genre) ?>"
+                required
               >
             </div>
 
@@ -228,6 +230,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 name="developer"
                 placeholder="Example: FromSoftware"
                 value="<?= htmlspecialchars($developer) ?>"
+                required
               >
             </div>
 
@@ -240,6 +243,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 name="publisher"
                 placeholder="Example: Bandai Namco"
                 value="<?= htmlspecialchars($publisher) ?>"
+                required
               >
             </div>
 
@@ -251,6 +255,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 id="release_date"
                 name="release_date"
                 value="<?= htmlspecialchars($release_date) ?>"
+                required
               >
             </div>
 

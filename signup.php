@@ -1,14 +1,19 @@
 <?php 
     require_once("config.php");
-?>
+    require_once("auth.php");
+    redirect_if_logged_in();
+
+$flash_success = get_flash('flash_success');
+$flash_error   = get_flash('flash_error');
 
 
-<?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     try {
 
         if(!isset($_POST['terms'])) {
-            echo("<p stye='color: red;'>Please check terms and conditions box to continue</p>");
+           set_flash('flash_error', 'You must accept the Terms and Conditions to sign up.');
+            header("Location: signup.php");
+            exit();
         }
 
         $pdo = get_pdo();
@@ -24,15 +29,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $LowerEmail = strtolower(trim($_POST['Email'] ?? ''));
 
         if (!filter_input(INPUT_POST, "Email", FILTER_VALIDATE_EMAIL)) {
-            echo ("<p style='color: red;'>Email Invalid</p>");
+          set_flash('flash_error', 'Invalid email format. Please enter a valid email address.');
+            header("Location: signup.php");
+            exit();
         }elseif ($LowerEmail === $DB_Email) {
-            echo ("<p style='color: red;'>Email already exists</p>");
+            set_flash('flash_error', 'Email already exists.');
+            header("Location: signup.php");
+            exit();
         } elseif (strlen($_POST['Password']) < 8) {
-            echo("<p style='color: red;'>Password is too small, must be at least 8 characters long</p>"); 
+            set_flash('flash_error', 'Password is too small, must be at least 8 characters long.');
+            header("Location: signup.php");
+            exit();
         }elseif(preg_match("/[!@#$%^&*()<>?]/", $_POST['Password']) === 0){
-                echo("<p style='color: red;'> Password must contain at least one special character from this list: \"!@#$%^&*()<>?\"");
+                set_flash('flash_error', 'Password must contain at least one special character from this list: "!@#$%^&*()<>?"');
+                header("Location: signup.php");
+                exit();
         }elseif(strlen($_POST['PhoneNum']) > 10 || strlen($_POST['PhoneNum']) < 10){
-                echo("<p style='color: red;'> Your phone number needs to be 10 numbers long</p>");
+                set_flash('flash_error', 'Your phone number needs to be 10 numbers long');
+                header("Location: signup.php");
+                exit();
         }else {
 
         $hashedPW = password_hash($_POST['Password'], PASSWORD_BCRYPT);
@@ -47,13 +62,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ]);
 
         header("Location: login.php");
-        echo "<p style='color: red;'>Sigup successful. Please login to start</p>";
+        set_flash('flash_success', 'Signup successful. Please login to start.');
         exit();
        }
 
     } 
      catch (PDOException $e) {
-     echo "<p><strong>Error:</strong> " . $e->getMessage() . "</p>";
+        set_flash('flash_error', $e->getMessage());
+        header("Location: signup.php");
+        exit();
     }
 }
 ?>
@@ -73,6 +90,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </div>
 </div>
 <div class="col-md-6 right-side">
+     <div class="auth-flash-wrap">
+        <?php if ($flash_success): ?>
+            <div class="auth-flash auth-flash-success">
+                <?= htmlspecialchars($flash_success) ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($flash_error): ?>
+            <div class="auth-flash auth-flash-error">
+                <?= htmlspecialchars($flash_error) ?>
+            </div>
+        <?php endif; ?>   
+    </div>
     <h2 class="text-center text-white mb-4 signup-title"> Sign Up </h2>
     <form method="POST">
     <!--FNAME-->

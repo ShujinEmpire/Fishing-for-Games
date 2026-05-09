@@ -27,23 +27,11 @@ try {
             g.Description,
             g.Cover_Image,
             g.Rating,
-            COUNT(r.RID) AS ReviewCount
-        FROM Game g
-        LEFT JOIN Review r ON g.GID = r.GID
+            g.ReviewCount
+        FROM GameRating g
         WHERE
             :term = ''
             OR g.GName LIKE :like1
-        GROUP BY
-            g.GID,
-            g.GName,
-            g.Platforms,
-            g.Genre,
-            g.DSName,
-            g.PName,
-            g.GReleaseDate,
-            g.Description,
-            g.Cover_Image
-        ORDER BY g.GName ASC
     ");
 
     $stmt->execute([

@@ -2,9 +2,11 @@
 require_once("config.php");
 require_once("auth.php");
 redirect_if_logged_in();
-?>
 
-<?php
+
+$flash_success = get_flash('flash_success');
+$flash_error   = get_flash('flash_error');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //echo("here 0<br>");
     $pdo = get_pdo();
@@ -46,12 +48,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: dashboard.php");
             exit();
         }else {
-            echo("<p style='color: red;'> Password incorrect </p>");
+           set_flash('flash_error', 'Incorrect password. Please try again.');
+            header("Location: login.php");
+            exit();
           //  echo"here 2";
         }
 
     } else {
-        echo("<p style='color: red;'>Email incorrect or not found</p>");
+        set_flash('flash_error', 'Email incorrect or not found.');
+        header("Location: login.php");
+        exit();
         //echo("here 3");
     }
 }
@@ -61,29 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //echo("here 4");
 ?>
  
-<!--
-<html>
-<body>
-    <form method="POST">
-    <div class="mb-3">
-        <label for="input" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="input" aria-describedby="emailHelp" name = "email">
-    </div>
-    <div class="mb-3">
-        <label for="input" class="form-label">Password</label>
-        <input type="password" class="form-control" id="input" name = "password">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-    <p class="mt-3">
-        Don't have an account?
-        <a href="signup.php">Sign up here</a>
-    </p>
-
-    </form>
-</body>
-</html
--->
-
 <html>
     <link href="style.css" rel="stylesheet">
 <body>
@@ -98,6 +81,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 </div>
 <div class="col-md-6 right-side">
+    <div class="auth-page-stack">
+
+    <div class="auth-flash-wrap">
+        <?php if ($flash_success): ?>
+            <div class="auth-flash auth-flash-success">
+                <?= htmlspecialchars($flash_success) ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($flash_error): ?>
+            <div class="auth-flash auth-flash-error">
+                <?= htmlspecialchars($flash_error) ?>
+            </div>
+        <?php endif; ?>   
+    </div>
+    
     <h2 class="text-center text-white mb-4 signup-title"> Sign IN </h2>
     <form method="POST">
   <div class="mb-3">
