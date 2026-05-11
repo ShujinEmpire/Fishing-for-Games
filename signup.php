@@ -104,8 +104,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
  <div class="input-wrapper mb-3">
             <i class="fa-solid fa-key input-icon"></i>
         <input type="password" class="form-control neon-input mb-3" id="Password" name="Password" placeholder="Password">
-       <div class="form-check text-white mb-3" required>
+       
 </div>
+        <div class="form-check text-white mb-3" required>
         <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
         <label class="form-check-label">
             I accept the Terms and Conditions
